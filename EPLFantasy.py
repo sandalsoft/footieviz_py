@@ -14,30 +14,41 @@ def main():
 	# print json_data
 
 def getPlayerData(player_id):
-		stats_url = FANTASY_STATS_BASE_URL + str(player_id)
+	
+	headers = { 
+			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
+			# 'Host' : 'fantasy.premierleague.com',
+			# 'DNT' : '1',
+			# 'Connection' : 'keep-alive',
+			# 'Cache-Control' : 'max-age=0',
+			# 'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+			# 'Accept-Encoding' : 'gzip,deflate,sdch',
+			# 'Accept-Language' : 'en-US,en;q=0.8'
+	}
 
-	# for x in range(113, MAX_PLAYERS):
-		headers = { 'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
-			'Host' : 'fantasy.premierleague.com',
-			'DNT' : '1',
-			'Connection' : 'keep-alive',
-			'Cache-Control' : 'max-age=0',
-			'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'Accept-Encoding' : 'gzip,deflate,sdch',
-			'Accept-Language' : 'en-US,en;q=0.8'
-		 }
-		
-		# request = urllib2.Request(stats_url, None, headers)
-		# response = urllib2.urlopen(request)
-		# print response.read()
-		# json_data = json.loads(response.read())
-		json_data = json.loads(urllib2.urlopen(stats_url).read())
-		print json_data
-		player = mapJsonToPlayerDict(json_data)
-		pprint(player)
-		# print str(player['id']) + " | " + player['position']
-		time.sleep(2)
-
+	for x in range(1, MAX_PLAYERS):
+		stats_url = FANTASY_STATS_BASE_URL + str(x)
+		try:
+			req = urllib2.Request(stats_url, None, headers)
+			response = urllib2.urlopen(req)
+			data = response.read()
+			json_data = json.loads(data)
+			# json_data = json.loads(urllib2.urlopen(stats_url).read())
+			# print json_data
+			# pprint(player)
+		except ValueError:
+			# Decoding failed
+			print "ERROR: JSON value decoding error on id " + x
+			print response.info()
+			print data
+		else:
+			player = mapJsonToPlayerDict(json_data)
+			savePlayer(player)
+			time.sleep(1)
+			continue
+def savePlayer(player):
+	pprint(player, indent=4)
+	
 def mapJsonToPlayerDict(json_data):
 	player = {}
 	player['id'] = json_data['id']
