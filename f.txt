@@ -1,25 +1,37 @@
-player['news_added'] = json_data['news_added']
-	player['in_dreamteam'] = json_data['in_dreamteam']
-	player['team_code'] = json_data['team_code']
-	player['shirt_image_url'] = json_data['shirt_image_url']
-	player['transfers_out_event'] = json_data['transfers_out_event']
-	player['element_type_id'] = json_data['element_type_id']
-	player['max_cost'] = json_data['max_cost']
-	player['event_explain'] = json_data['event_explain']
-	player['selected'] = json_data['selected']
-	player['min_cost'] = json_data['min_cost']
-	player['fixtures'] = json_data['fixtures']
-	player['season_history'] = json_data['season_history']
-	player['total_points'] = json_data['total_points']
-	player['status'] = json_data['status']
-	player['added'] = json_data['added']
-	player['form'] = json_data['form']
-	player['shirt_mobile_image_url'] = json_data['shirt_mobile_image_url']
-	player['current_fixture'] = json_data['current_fixture']
-	player['now_cost'] = json_data['now_cost']
-	player['points_per_game'] = json_data['points_per_game']
-	player['transfers_in'] = json_data['transfers_in']
-	player['news'] = json_data['news']
-	player['original_cost'] = json_data['original_cost']
-	player['event_points'] = json_data['event_points']
-	player['news_return'] = json_data['news_return']
+
+0 season
+1 minutes_played
+2 goals
+3 assists
+4 clean sheets
+5 goals condeded?
+6 own_goals?
+7 penalties_saved?
+8 penalties_missed
+9 yellow cards
+10 red cards
+11 saves
+12 bonus
+13 ea_sports_ppi
+14 net_transfers
+15 value
+16 points
+
+
+season_stats['minutes_played'] = event[3]
+season_stats['goals_scored'] = event[4]
+season_stats['assists'] = event[5]
+season_stats['clean_sheets'] = event[6]
+season_stats['goals_conceded'] = event[7]
+season_stats['own_goals'] = event[8]
+season_stats['penalties_saved'] = event[9]
+season_stats['penalties_missed'] = event[10]
+season_stats['yellow_cards'] = event[11]
+season_stats['red_cards'] = event[12]
+season_stats['saves'] = event[13]
+season_stats['bonus'] = event[14]
+season_stats['EA_Sports_PPI'] = event[15]
+season_stats['bous_points_system'] = event[16]
+season_stats['net_transfers'] = event[17]
+season_stats['value'] = event[18]
+season_stats['points'] = event[19]

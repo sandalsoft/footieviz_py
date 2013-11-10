@@ -28,7 +28,26 @@ CREATE TABLE Teams (
 
 CREATE TABLE SeasonsHistory (
   id INTEGER PRIMARY KEY,
-  season_name TEXT
+  season TEXT,
+  minutes_played INTEGER,
+  goals_scored INTEGER,
+  assists INTEGER,
+  clean_sheets INTEGER,
+  goals_conceded INTEGER,
+  own_goals INTEGER,
+  penalties_saved INTEGER,
+  penalties_missed INTEGER,
+  yellow_cards INTEGER,
+  red_cards INTEGER,
+  saves INTEGER,
+  bonus INTEGER,
+  ea_sports_ppi INTEGER,
+  bonuses_points_system INTEGER,
+  net_transfers INTEGER,
+  value INTEGER,
+  points INTEGER,
+  player_id INTEGER,
+  FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 
 CREATE TABLE Statuses (
@@ -38,8 +57,8 @@ CREATE TABLE Statuses (
 
 CREATE TABLE Positions (
   id INTEGER PRIMARY KEY,
-  position TEXT,
-  short_position TEXT
+  name TEXT,
+  short_name TEXT
 );
 
 CREATE TABLE Players (
@@ -114,9 +133,15 @@ CREATE TABLE FixturesHistory (
   saves INTEGER,
   bonus INTEGER,
   ea_sports_ppi INTEGER,
-  bonues_points_system INTEGER,
+  bonuses_points_system INTEGER,
   net_transfers INTEGER,
   value INTEGER,
   points INTEGER,
   FOREIGN KEY(player_id) REFERENCES Players(id)
 );
+
+
+-- DELETE FROM Fixtures;
+-- DELETE FROM FixturesHistory;
+-- DELETE FROM EventsExplain;
+-- DELETE FROM Players;
