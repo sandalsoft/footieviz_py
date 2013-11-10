@@ -25,23 +25,23 @@ def getPlayerData():
 			# 'Accept-Language' : 'en-US,en;q=0.8'
 	}
 
-	for x in range(1, 2):
+	for x in range(110, 130):
 		stats_url = FANTASY_STATS_BASE_URL + str(x)
 		try:
 			req = urllib2.Request(stats_url, None, headers)
 			response = urllib2.urlopen(req)
 			data = response.read()
 			json_data = json.loads(data)
-			# json_data = json.loads(urllib2.urlopen(stats_url).read())
-			# print json_data
-			# pprint(player)
+
 		except urllib2.URLError, e:
 			print e
+
 		except ValueError:
 			# Decoding failed
 			print "ERROR: JSON value decoding error on id " + str(x)
 			print response.info()
 			print data
+			
 		else:
 			player = mapJsonToPlayerDict(json_data)
 			savePlayer(player)
@@ -51,8 +51,44 @@ def savePlayer(player):
 	con = lite.connect('db.sqlite')
 	with con:
 		cur = con.cursor()  
-		cur.execute("INSERT INTO Players VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [player['id'],player['transfers_out'],player['code'], player['event_total'],player['last_season_points'],player['squad_number'],player['news_updated'],None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None])
-												
+		cur.execute("INSERT INTO Players VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+			[
+			player['id'],
+			player['transfers_out'],
+			player['code'], 
+			player['event_total'],
+			player['last_season_points'],
+			player['squad_number'],
+			player['news_updated'],
+			player['event_cost'],
+			player['in_dreamteam'] ,
+			player['team_code'] ,
+			player['shirt_image_url'] ,
+			player['transfers_out_event'] ,
+			player['element_type_id'] ,
+			player['max_cost'] ,
+			player['event_explain'] ,
+			player['selected'] ,
+			player['min_cost'] ,
+			player['fixtures'] ,
+			player['season_history'] ,
+			player['total_points'] ,
+			player['status'] ,
+			player['added'] ,
+			player['form'] ,
+			player['shirt_mobile_image_url'] ,
+			player['current_fixture'] ,
+			player['now_cost'] ,
+			player['points_per_game'] ,
+			player['transfers_in'] ,
+			player['news'] ,
+			player['original_cost'] ,
+			player['event_points'] ,
+			player['news_return'] 
+			])
+			#None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None])
+		
+		print "Inserted: " + str(player['id'])								
 	# pprint(player, indent=2)
 def mapJsonToPlayerDict(json_data):
 	player = {}
@@ -61,7 +97,6 @@ def mapJsonToPlayerDict(json_data):
 	player['first_name'] = json_data['first_name']
 	player['web_name'] = json_data['web_name']
 	player['position'] = json_data['type_name']
-
 	player['transfers_out'] = json_data['transfers_out']
 	player['code'] = json_data['code']
 	player['event_total'] = json_data['event_total']
