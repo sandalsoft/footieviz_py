@@ -4,17 +4,16 @@ import datetime
 import json
 from pprint import pprint
 import time
+import sqlite3 as lite
 
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 MAX_PLAYERS = 675
 
-
 def main():
-	json_data = getPlayerData(513)
+	json_data = getPlayerData()
 	# print json_data
 
-def getPlayerData(player_id):
-	
+def getPlayerData():
 	headers = { 
 			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
 			# 'Host' : 'fantasy.premierleague.com',
@@ -26,7 +25,7 @@ def getPlayerData(player_id):
 			# 'Accept-Language' : 'en-US,en;q=0.8'
 	}
 
-	for x in range(1, MAX_PLAYERS):
+	for x in range(1, 2):
 		stats_url = FANTASY_STATS_BASE_URL + str(x)
 		try:
 			req = urllib2.Request(stats_url, None, headers)
@@ -36,9 +35,11 @@ def getPlayerData(player_id):
 			# json_data = json.loads(urllib2.urlopen(stats_url).read())
 			# print json_data
 			# pprint(player)
+		except urllib2.URLError, e:
+			print e
 		except ValueError:
 			# Decoding failed
-			print "ERROR: JSON value decoding error on id " + x
+			print "ERROR: JSON value decoding error on id " + str(x)
 			print response.info()
 			print data
 		else:
@@ -47,9 +48,12 @@ def getPlayerData(player_id):
 			time.sleep(.2)
 			continue
 def savePlayer(player):
-
-	pprint(player, indent=2)
-
+	con = lite.connect('db.sqlite')
+	with con:
+		cur = con.cursor()  
+		cur.execute("INSERT INTO Players VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [player['id'],player['transfers_out'],player['code'], player['event_total'],player['last_season_points'],player['squad_number'],player['news_updated'],None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None])
+												
+	# pprint(player, indent=2)
 def mapJsonToPlayerDict(json_data):
 	player = {}
 	player['id'] = json_data['id']
@@ -57,6 +61,7 @@ def mapJsonToPlayerDict(json_data):
 	player['first_name'] = json_data['first_name']
 	player['web_name'] = json_data['web_name']
 	player['position'] = json_data['type_name']
+
 	player['transfers_out'] = json_data['transfers_out']
 	player['code'] = json_data['code']
 	player['event_total'] = json_data['event_total']
