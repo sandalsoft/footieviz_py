@@ -15,7 +15,8 @@ CREATE TABLE Fixtures (
 
 CREATE TABLE Teams (
   id INTEGER PRIMARY KEY,
-  name TEXT
+  name TEXT,
+  short_name TEXT
 );
 
 CREATE TABLE SeasonsHistory (
