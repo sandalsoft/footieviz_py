@@ -14,7 +14,10 @@ CREATE TABLE Fixtures (
   date_time TEXT,
   gameweek INTEGER,
   opponent_team_id INTEGER,
-  FOREIGN KEY(opponent_team_id) REFERENCES Teams(id),
+  is_homegame INTEGER,
+  player_id INTEGER,
+  FOREIGN KEY(player_id) REFERENCES Players(id),
+  FOREIGN KEY(opponent_team_id) REFERENCES Teams(id)
 );
 
 CREATE TABLE Teams (

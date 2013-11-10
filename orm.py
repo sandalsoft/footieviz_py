@@ -54,17 +54,36 @@ class Player(Base):
   # selected_by  = Column(Float, nullable=False)
   # last_name= Column(String(50), nullable=False)
   # phone_mobile_url= Column(String(250), nullable=False)
-  event_explain_id = Column(Integer, ForeignKey('EventsExplain.id'))
-  event_explains = relationship("EventsExplain", order_by="EventsExplain.id", backref=backref('Players', order_by=id))
 
-class EventExplain(Base):
-	__tablename__ = "EventsExplain"
+  # event_explain_id = Column(Integer, ForeignKey('EventsExplain.id'))
+  # event_explains = relationship("EventsExplain", order_by="EventsExplain.id", backref=backref('Players', order_by=id))
+
+  # fixture_id = Column(Integer, ForeignKey('Fixtures.id'))
+  # fixture = relationship("Fixture", backref="player")
+
+class Fixture(Base):
+	__tablename__ = "Fixtures"
 	id = Column(Integer, primary_key=True)
-	minutes_played = Column(Integer, nullable=False)
-	col2 = Column(Integer, nullable=False)
-	col3 = Column(Integer, nullable=False)
-	player_id = Column(Integer, ForeignKey('Players.id'))
-	player = relationship("Players", order_by="Player.id", backref=backref('EventsExplain', order_by=id))
+	date_time = Column(DateTime, nullable=False)
+	gameweek = Column(Integer, nullable=False)
+	is_homegame = Column(Boolean, nullable=False)
+	opponent_team_id = Column(Integer, ForeignKey('Teams.id'))
+	player_id = Column(Integer, ForeignKey('Players.id')) 
+
+class Teams(Base):
+	__tablename__ = "Teams"
+	id = Column(Integer, primary_key=True)
+	name = Column(String(50), nullable=False)
+	short_name = Column(String(4), nullable=False)
+
+# class EventExplain(Base):
+# 	__tablename__ = "EventsExplain"
+# 	id = Column(Integer, primary_key=True)
+# 	minutes_played = Column(Integer, nullable=False)
+# 	col2 = Column(Integer, nullable=False)
+# 	col3 = Column(Integer, nullable=False)
+# 	player_id = Column(Integer, ForeignKey('Players.id'))
+# 	player = relationship("Players", order_by="Player.id", backref=backref('EventsExplain', order_by=id))
 
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.
