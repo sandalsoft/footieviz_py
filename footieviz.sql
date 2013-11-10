@@ -12,7 +12,9 @@ CREATE TABLE EventsExplain (
 CREATE TABLE Fixtures (
   id INTEGER PRIMARY KEY,
   date_time TEXT,
-  gameweek INTEGER
+  gameweek INTEGER,
+  opponent_team_id INTEGER,
+  FOREIGN KEY(opponent_team_id) REFERENCES Teams(id),
 );
 
 CREATE TABLE Teams (
