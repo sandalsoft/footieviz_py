@@ -8,6 +8,7 @@ import sqlite3 as lite
 
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 MAX_PLAYERS = 675
+con = lite.connect('db.sqlite')
 
 def main():
 	json_data = getPlayerData()
@@ -41,14 +42,42 @@ def getPlayerData():
 			print "ERROR: JSON value decoding error on id " + str(x)
 			print response.info()
 			print data
-			
+
 		else:
 			player = mapJsonToPlayerDict(json_data)
 			savePlayer(player)
 			time.sleep(.2)
 			continue
+def getStatusId(status):
+	return {
+		'i': 1,
+		'a': 2,
+		'd': 3,
+	}[status]
+
+def getPositionId(position):
+	return {
+		'Goalkeeper': 1,
+		'Defender' : 2,
+		'Midfielder' : 3,
+		"Forward" : 4
+	}[position]
+
+def insertEventsExplain(player):
+	with con:
+		cur = con.cursor()
+		cur.execute("INSERT INTO EventsExplain VALUES(?,?,?,?,?)", 
+			[
+			None,
+			player['event_explain'][0],
+			player['event_explain'][1],
+			player['event_explain'][2],
+			player['id']
+			])
+
 def savePlayer(player):
-	con = lite.connect('db.sqlite')
+	insertEventsExplain(player)
+
 	with con:
 		cur = con.cursor()  
 		cur.execute("INSERT INTO Players VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
@@ -61,19 +90,24 @@ def savePlayer(player):
 			player['squad_number'],
 			player['news_updated'],
 			player['event_cost'],
+			player['news_added'],
+			player['web_name'] ,
 			player['in_dreamteam'] ,
 			player['team_code'] ,
 			player['shirt_image_url'] ,
+			player['first_name'] ,
 			player['transfers_out_event'] ,
 			player['element_type_id'] ,
 			player['max_cost'] ,
-			player['event_explain'] ,
+			getEventsExplainId()
 			player['selected'] ,
 			player['min_cost'] ,
-			player['fixtures'] ,
-			player['season_history'] ,
+			# fixture_id 
+			#season_history_id player['season_history'] ,
 			player['total_points'] ,
-			player['status'] ,
+			getPositionId(player['position']),
+			player['team_id'] 
+			getStatusId(player['status']),
 			player['added'] ,
 			player['form'] ,
 			player['shirt_mobile_image_url'] ,
@@ -84,7 +118,13 @@ def savePlayer(player):
 			player['news'] ,
 			player['original_cost'] ,
 			player['event_points'] ,
-			player['news_return'] 
+			player['news_return'] ,
+			#fixture_history_id
+			player['next_fixture'],
+			player['transfers_in_event'],
+			player['selected_by'] ,
+			player['last_name'] ,
+			player['photo_mobile_url'],
 			])
 			#None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None])
 		

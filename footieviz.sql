@@ -2,9 +2,11 @@
 
 CREATE TABLE EventsExplain (
   id INTEGER PRIMARY KEY,
-  mins_played TEXT,
+  minutes_played TEXT,
   col2 INTEGER,
-  col3 INTEGER
+  col3 INTEGER,
+  player_id INTEGER,
+  FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 
 CREATE TABLE Fixtures (
@@ -31,7 +33,8 @@ CREATE TABLE Statuses (
 
 CREATE TABLE Positions (
   id INTEGER PRIMARY KEY,
-  position TEXT
+  position TEXT,
+  short_position TEXT
 );
 
 CREATE TABLE Players (
@@ -56,7 +59,6 @@ CREATE TABLE Players (
   selected_total INTEGER,
   min_cost INTEGER,
   fixture_id INTEGER,
-  pts INTEGER,
   season_history_id INTEGER,
   total_points INTEGER,
   position_id INTEGER,
@@ -72,7 +74,7 @@ CREATE TABLE Players (
   news TEXT,
   original_cost INTEGER,
   event_points INTEGER,
-  news_returns TEXT,
+  news_return TEXT,
   fixture_history_id INTEGER,
   next_fixture INTEGER,
   transfers_in_event INTEGER,
