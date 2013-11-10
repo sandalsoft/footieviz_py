@@ -44,11 +44,12 @@ def getPlayerData(player_id):
 		else:
 			player = mapJsonToPlayerDict(json_data)
 			savePlayer(player)
-			time.sleep(1)
+			time.sleep(.2)
 			continue
 def savePlayer(player):
-	pprint(player, indent=4)
-	
+
+	pprint(player, indent=2)
+
 def mapJsonToPlayerDict(json_data):
 	player = {}
 	player['id'] = json_data['id']
