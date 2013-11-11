@@ -1,37 +1,24 @@
+1|Arsenal|ARS
+2|Aston Villa|AVL
+3|Cardiff City|CAR
+4|Chelsea|CHE
+5|Crystal Palace|CRY
+6|Everton|EVE
+7|Fulham|FUL
+8|Hull City|HUL
+9|Liverpool|LIV
+10|Manchester City|MC
+11|Manchester United|MUN
+12|Newcastle|NEW
+13|Norwich City|NOR
+14|Southampton|SOU
+15|Stoke City|STK
+16|Sunderland|SUN
+17|Swansea City|SWA
+18|Tottenham Hotspur|TOT
+19|West Bromwich Albion|WBA
+20|West Ham United|WHU
 
-0 season
-1 minutes_played
-2 goals
-3 assists
-4 clean sheets
-5 goals condeded?
-6 own_goals?
-7 penalties_saved?
-8 penalties_missed
-9 yellow cards
-10 red cards
-11 saves
-12 bonus
-13 ea_sports_ppi
-14 net_transfers
-15 value
-16 points
-
-
-season_stats['minutes_played'] = event[3]
-season_stats['goals_scored'] = event[4]
-season_stats['assists'] = event[5]
-season_stats['clean_sheets'] = event[6]
-season_stats['goals_conceded'] = event[7]
-season_stats['own_goals'] = event[8]
-season_stats['penalties_saved'] = event[9]
-season_stats['penalties_missed'] = event[10]
-season_stats['yellow_cards'] = event[11]
-season_stats['red_cards'] = event[12]
-season_stats['saves'] = event[13]
-season_stats['bonus'] = event[14]
-season_stats['EA_Sports_PPI'] = event[15]
-season_stats['bous_points_system'] = event[16]
-season_stats['net_transfers'] = event[17]
-season_stats['value'] = event[18]
-season_stats['points'] = event[19]
+	return {
+		'Goalkeeper': 1,
+		'Defender' : 2

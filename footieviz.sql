@@ -78,11 +78,11 @@ CREATE TABLE Players (
   transfers_out_event INTEGER,
   element_type_id INTEGER,
   max_cost INTEGER,
-  event_explain_id INTEGER,
+  -- event_explain_id INTEGER,
   selected_total INTEGER,
   min_cost INTEGER,
-  fixture_id INTEGER,
-  season_history_id INTEGER,
+  -- fixture_id INTEGER,
+  -- season_history_id INTEGER,
   total_points INTEGER,
   position_id INTEGER,
   team_id INTEGER,
@@ -103,13 +103,13 @@ CREATE TABLE Players (
   transfers_in_event INTEGER,
   selected_by NUMERIC,
   last_name TEXT,
-  phone_mobile_url TEXT,
-  FOREIGN KEY(event_explain_id) REFERENCES EventsExplain(id), 
-  FOREIGN KEY(fixture_history_id) REFERENCES FixturesHistory(id),
+  photo_mobile_url TEXT,
   FOREIGN KEY(status_id) REFERENCES Statuses(id),
   FOREIGN KEY(team_id) REFERENCES Teams(id),
-  FOREIGN KEY(position_id) REFERENCES Positions(id),
-  FOREIGN KEY(season_history_id) REFERENCES SeasonsHistory(id)
+  FOREIGN KEY(position_id) REFERENCES Positions(id)
+  -- FOREIGN KEY(event_explain_id) REFERENCES EventsExplain(id), 
+  -- FOREIGN KEY(fixture_history_id) REFERENCES FixturesHistory(id),
+  -- FOREIGN KEY(season_history_id) REFERENCES SeasonsHistory(id)
 );
 
 

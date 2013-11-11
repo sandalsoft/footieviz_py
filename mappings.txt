@@ -1,0 +1,59 @@
+[0] 'minutes_played' 
+[0] 'goals_scored'
+[0] 'assists'
+[0] 'clean_sheets'
+[0] 'goals_conceded'
+[0] 'own_goals'
+[0] 'penalties_saved'
+[0] 'penalties missed'
+[0] 'yellow_cards'
+[0] 'red_cards'
+[0] 'saves'
+[0] 'bonus'
+[0] 'EA_Spots_PPI'
+[0] 'net_transfers'
+[0] 'value'
+[0] 'points'
+
+mappings for fixture history and season history:
+
+ 'date' => strval($rows[0]),
+    'week' => strval($rows[1]),
+    'result' => strval($rows[2]),
+    'minutes_played' => strval($rows[3]),
+    'goals_scored'=>strval($rows[4]),
+    'assists'=>strval($rows[5]),
+    'clean_sheets'=>strval($rows[6]),
+    'goals_conceded'=>strval($rows[7]),
+    'own_goals'=>strval($rows[8]),
+    'penalties_saved'=>strval($rows[9]),
+    'penalties missed'=>strval($rows[10]),
+    'yellow_cards'=>strval($rows[11]),
+    'red_cards'=>strval($rows[12]),
+    'saves'=>strval($rows[13]),
+    'bonus'=>strval($rows[14]),
+    'EA_Spots_PPI'=>strval($rows[15]),
+    'net_transfers'=>strval($rows[16]),
+    'value'=>strval($rows[17]),
+    'points'=>strval($rows[18]),
+
+    		fixture_event['date'] = event[0]
+		fixture_event['week'] = event[1]
+		fixture_event['result'] = event[2]
+		fixture_event['minutes_played'] = event[3]
+		fixture_event['goals_scored'] = event[4]
+		fixture_event['assists'] = event[5]
+		fixture_event['clean_sheets'] = event[6]
+		fixture_event['goals_conceded'] = event[7]
+		fixture_event['own_goals'] = event[8]
+		fixture_event['penalties_saved'] = event[9]
+		fixture_event['penalties_missed'] = event[10]
+		fixture_event['yellow_cards'] = event[11]
+		fixture_event['red_cards'] = event[12]
+		fixture_event['saves'] = event[13]
+		fixture_event['bonus'] = event[14]
+		fixture_event['EA_Sports_PPI'] = event[15]
+		fixture_event['bous_points_system'] = event[16]
+		fixture_event['net_transfers'] = event[17]
+		fixture_event['value'] = event[18]
+		fixture_event['points'] = event[19]
