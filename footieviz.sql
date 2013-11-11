@@ -57,8 +57,7 @@ CREATE TABLE Statuses (
 
 CREATE TABLE Positions (
   id INTEGER PRIMARY KEY,
-  name TEXT,
-  short_name TEXT
+  name TEXT
 );
 
 CREATE TABLE Players (
@@ -145,3 +144,4 @@ CREATE TABLE FixturesHistory (
 -- DELETE FROM FixturesHistory;
 -- DELETE FROM EventsExplain;
 -- DELETE FROM Players;
+-- DELETE FROM SeasonsHistory;

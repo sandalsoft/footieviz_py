@@ -7,7 +7,7 @@ Base = declarative_base()
 
 class EventExplain(Base):
   __tablename__ = "EventsExplain"
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, autoincrement=True)
   minutes_played = Column(Integer, nullable=True)
   col2 = Column(Integer, nullable=True)
   col3 = Column(Integer, nullable=True)
@@ -15,7 +15,7 @@ class EventExplain(Base):
 
 class Fixture(Base):
   __tablename__ = "Fixtures"
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, autoincrement=True)
   date_time = Column(DateTime, nullable=False)
   gameweek = Column(Integer, nullable=False)
   is_homegame = Column(Boolean, nullable=False)
@@ -25,7 +25,7 @@ class Fixture(Base):
 
 class FixtureHistory(Base):
   __tablename__ = "FixturesHistory"
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, autoincrement=True)
   player_id = Column(Integer, nullable=True)
   date_text = Column(String(50), nullable=False)
   gameweek = Column(Integer, nullable=True)
@@ -109,7 +109,7 @@ class Position(Base):
 
 class SeasonHistory(Base):
   __tablename__ = "SeasonsHistory"
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, autoincrement=True)
   season = Column(String(10), nullable=False)
   minutes_played = Column(Integer, nullable=True)
   goals_scored = Column(Integer, nullable=True)
