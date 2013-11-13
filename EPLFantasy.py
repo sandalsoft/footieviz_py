@@ -15,12 +15,20 @@ MAX_PLAYERS = 675
 
 
 def main():
-	# json_data = getPlayerData()
+
+# LOAD FROM INTARWEBZ
+	# for x in range(randrange(1,MAX_PLAYERS), MAX_PLAYERS):
+	# 	json_data = getPlayerData(x)
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
+	# 	time.sleep(.2)
+
+# LOAD FROM FILE
 	json_data_all_players = loadPlayerData('raw_data.json')
-	for player_data in json_data_all_players:
-		player = mapJsonToPlayerDict(player_data)
+	for json_data in json_data_all_players:
+		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
-	# print json_data
+		# print json_data
 
 def loadPlayerData(filename):
 	json_data=open(filename)
@@ -28,7 +36,7 @@ def loadPlayerData(filename):
 	return data
 	# pprint(data)
 
-def getPlayerData():
+def getPlayerData(x):
 	headers = { 
 			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
 			# 'Host' : 'fantasy.premierleague.com',
@@ -40,29 +48,29 @@ def getPlayerData():
 			# 'Accept-Language' : 'en-US,en;q=0.8'
 	}
 
-	for x in range(randrange(4,MAX_PLAYERS), MAX_PLAYERS):
-		stats_url = FANTASY_STATS_BASE_URL + str(x)
-		try:
-			req = urllib2.Request(stats_url, None, headers)
-			response = urllib2.urlopen(req)
-			data = response.read()
-			json_data = json.loads(data)
+	
+	stats_url = FANTASY_STATS_BASE_URL + str(x)
+	try:
+		req = urllib2.Request(stats_url, None, headers)
+		response = urllib2.urlopen(req)
+		data = response.read()
+		json_data = json.loads(data)
 
-		except urllib2.URLError, e:
-			print e
+	except urllib2.URLError, e:
+		print e
 
-		except ValueError:
-			# Decoding failed
-			print "ERROR: JSON value decoding error on id " + str(x)
-			print response.info()
-			print data
+	except ValueError:
+		# Decoding failed
+		print "ERROR: JSON value decoding error on id " + str(x)
+		print response.info()
+		print data
 
-		else:
-			return json_data
-			# pprint(player)
-			return player
-			time.sleep(.2)
-			continue
+	else:
+		return json_data
+		# pprint(player)
+		# return player
+		# time.sleep(.2)
+		# continue
 
 
 #
