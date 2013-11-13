@@ -57,3 +57,37 @@ mappings for fixture history and season history:
 		fixture_event['net_transfers'] = event[17]
 		fixture_event['value'] = event[18]
 		fixture_event['points'] = event[19]
+
+		'Arsenal': 1,
+		'Aston Villa': 2,
+		'Cardiff City': 3,
+		'Chelsea': 4,
+		'Crystal Palace': 5,
+		'Everton': 6,
+		'Fulham': 7,
+		'Hull City': 8,
+		'Liverpool': 9,
+		'Manchester City': 10,
+		'Manchester United': 11,
+		'Newcastle': 12,
+		'Norwich City': 13,
+		'Southampton': 14,
+		'Stoke City': 15,
+		'Sunderland': 16,
+		'Swansea City': 17,
+		'Tottenham Hotspur': 18,
+		'West Bromwich Albion': 19,
+		'West Ham United': 20
+
+
+		Teams player id
+		1 Arsenal
+		
+		180 Hull City
+		200 Liverpool
+		240 Man City
+		350 Stoke City
+		380 Sunderland
+		410 Swansea 
+		450 West Brom
+		475 West Ham

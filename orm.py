@@ -124,7 +124,7 @@ class SeasonHistory(Base):
   saves = Column(Integer, nullable=True)
   bonus = Column(Integer, nullable=True)
   ea_sports_ppi = Column(Integer, nullable=True)
-  bonuses_points_system = Column(Integer, nullable=True)
+  # bonuses_points_system = Column(Integer, nullable=True)
   net_transfers = Column(Integer, nullable=True)
   value = Column(Integer, nullable=True)
   points = Column(Integer, nullable=True)

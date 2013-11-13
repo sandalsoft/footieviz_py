@@ -42,7 +42,7 @@ CREATE TABLE SeasonsHistory (
   saves INTEGER,
   bonus INTEGER,
   ea_sports_ppi INTEGER,
-  bonuses_points_system INTEGER,
+  -- bonuses_points_system INTEGER,
   net_transfers INTEGER,
   value INTEGER,
   points INTEGER,

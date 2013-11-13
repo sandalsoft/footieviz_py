@@ -30,7 +30,7 @@ def getPlayerData():
 			# 'Accept-Language' : 'en-US,en;q=0.8'
 	}
 
-	for x in range(1, 130):
+	for x in range(randrange(4,MAX_PLAYERS), MAX_PLAYERS):
 		stats_url = FANTASY_STATS_BASE_URL + str(x)
 		try:
 			req = urllib2.Request(stats_url, None, headers)
@@ -49,46 +49,11 @@ def getPlayerData():
 
 		else:
 			player = mapJsonToPlayerDict(json_data)
+			# pprint(player)
 			savePlayer(player)
 			time.sleep(.2)
 			continue
-def getStatusId(status):
-	return {
-		'i': 1,
-		'a': 2,
-		'd': 3,
-	}[status]
 
-def getPositionId(position):
-	return {
-		'Goalkeeper': 1,
-		'Defender' : 2,
-		'Midfielder' : 3,
-		"Forward" : 4
-	}[position]
-def getTeamId(team):
-	return {
-		'Arsenal': 1,
-		'Aston Villa': 2,
-		'Cardiff City': 3,
-		'Chelsea': 4,
-		'Crystal Palace': 5,
-		'Everton': 6,
-		'Fulham': 7,
-		'Hull City': 8,
-		'Liverpool': 9,
-		'Manchester City': 10,
-		'Manchester United': 11,
-		'Newcastle': 12,
-		'Norwich City': 13,
-		'Southampton': 14,
-		'Stoke City': 15,
-		'Sunderland': 16,
-		'Swansea City': 17,
-		'Tottenham Hotspur': 18,
-		'West Bromwich Albion': 19,
-		'West Ham United': 20
-	}[team]
 
 #
 # SQLA ORM Insertion
@@ -100,8 +65,11 @@ def savePlayer(player):
 	DBSession = sessionmaker(bind=engine)
 	session = DBSession()
 	 
-	player_id = player['id']
-	player = Player(id=player_id,
+	player_id = int(player['id'])
+	print "Starting ID: " + str(player_id)
+
+# Create Player Object ORM
+	playerORM = Player(id=player_id,
 		transfers_out =player['transfers_out'],
 		code =player['code'],
 		event_total =player['event_total'],
@@ -145,12 +113,43 @@ def savePlayer(player):
 		last_name =player['last_name'],
 		photo_mobile_url =player['photo_mobile_url']
 		)
-		#player_id=player_id, date_text="19 Aug 20:00", gameweek=1,result="NEW(H) 4-0", minutes_played=90,goals_scored= 0,assists= 1,clean_sheets= 1,goals_conceded= 0,own_goals= 0,penalties_saved= 0,penalties_missed= 0,yellow_cards= 0,red_cards=0,saves= 0,bonus= 1,ea_sports_ppi=22,bonuses_points_system= 11,net_transfers= 0,value= 60,points= 10)
 
+ # THIS NEED TO GET RAW JSON ARRAY OF SEASON HISTORY
+ # player is the newly created object, not jason
+# Create season history Object ORM
+	# season_history = []
+
+	# season_history = SeasonHistory(player['season_history'])
+	for season in player['season_history']:
+		
+		season_history = SeasonHistory(id=None,
+			player_id = player['id'],
+			season=season['season'],
+			minutes_played = season['minutes_played'],
+		  goals_scored = season['goals_scored'],
+		  assists = season['assists'],
+		  clean_sheets = season['clean_sheets'],
+		  goals_conceded = season['goals_conceded'],
+		  own_goals = season['own_goals'],
+		  penalties_saved = season['penalties_saved'],
+		  penalties_missed = season['penalties_missed'],
+		  yellow_cards = season['yellow_cards'],
+		  red_cards = season['red_cards'],
+		  saves = season['saves'],
+		  bonus = season['bonus'],
+		  ea_sports_ppi = season['ea_sports_ppi'],
+		  # bonuses_points_system = season['bonuses_poin	ts_system'],
+		  net_transfers = season['net_transfers'],
+		  value = season['value'],
+		  points = season['points'],
+			)
+		session.add(season_history)
 	try:
-		session.add(player)
+		session.add(playerORM)
+		# session.add(season_history)
+
 		session.commit()
-		print "Inserted: " # + str(player_id)								
+		print "Inserted: " + str(player_id)								
 	except IntegrityError, e:
 		print "Record already exists: " + e
 	else:
@@ -183,11 +182,42 @@ def mapJsonToPlayerDict(json_data):
 	player['event_explain'] = json_data['event_explain']
 	player['selected_total'] = json_data['selected']
 	player['min_cost'] = json_data['min_cost']
-	player['fixtures'] = json_data['fixtures']
+
+# FIXTURES
+	fixtures = []
+	for fixture in json_data['fixtures']['all']:
+		myfixture = {}
+# Create datetime of fixture week string
+		dt = datetime.datetime.strptime(fixture[0] + " 2013", '%d %b %H:%M %Y')
+		myfixture['date_time'] = dt
+
+# Create gameweek int 
+		myfixture['gameweek'] = int(fixture[1].split(' ')[1])
+
+# Create is_homegame boolean
+		if 'A' not in fixture[2].split(' ')[1]:
+			myfixture['is_homegame'] = True
+		else:
+			myfixture['is_homegame'] = False
+
+# Create opponent TeamId
+#0 "12 Feb 19:45",
+#1 "Gameweek 26",
+#2 "Newcastle (A)"
+		opponent = fixture[2].split(' ')[0]
+		myfixture['opponent_team_id'] = getTeamThree(opponent)
+
+# Set player_id
+		myfixture['player_id'] = player['id']
+		fixtures.append(myfixture)
+	player['fixtures'] = fixtures
+
+# SEASON HISTORY
 	history = []
 	for season in json_data['season_history']:
 		try:
 			season_stats = {}
+			season_stats['season'] = season[0]
 			season_stats['minutes_played'] = season[1]
 			season_stats['goals_scored'] = season[2]
 			season_stats['assists'] = season[3]
@@ -200,7 +230,7 @@ def mapJsonToPlayerDict(json_data):
 			season_stats['red_cards'] = season[10]
 			season_stats['saves'] = season[11]
 			season_stats['bonus'] = season[12]
-			season_stats['EA_Sports_PPI'] = season[13]
+			season_stats['ea_sports_ppi'] = season[13]
 			#  This isn't in seasons history stats
 			# season_stats['bous_points_system'] = season[14]
 			season_stats['net_transfers'] = season[14]
@@ -211,7 +241,11 @@ def mapJsonToPlayerDict(json_data):
 			print json_data['season_history']
 			print "INDEX ERROR MAPPNIG SEASON HISTORY"
 
-	player['season_history'] = json_data['season_history']
+	player['season_history'] = history
+	# pprint(player['season_history'])
+	# print "told ya"
+
+
 	player['total_points'] = json_data['total_points']
 	player['status'] = json_data['status']
 	player['added'] = json_data['added']
@@ -225,6 +259,7 @@ def mapJsonToPlayerDict(json_data):
 	player['original_cost'] = json_data['original_cost']
 	player['event_points'] = json_data['event_points']
 	player['news_return'] = json_data['news_return']
+
 	events = []
 	for event in json_data['fixture_history']['all']:
 		fixture_event = {}
@@ -250,6 +285,7 @@ def mapJsonToPlayerDict(json_data):
 		fixture_event['points'] = event[19]
 		events.append(fixture_event)
 	player['fixture_history'] = events
+	
 	player['next_fixture'] = json_data['next_fixture']
 	player['transfers_in_event'] = json_data['transfers_in_event']
 	player['selected_by'] = json_data['selected_by']
@@ -259,6 +295,49 @@ def mapJsonToPlayerDict(json_data):
 
 
 	return player
+
+def getStatusId(status):
+	return {
+		'i': 1,
+		'a': 2,
+		'd': 3,
+		'n': 4,
+		's': 5
+	}[status]
+
+def getTeamThree(team):
+	return 3
+
+def getPositionId(position):
+	return {
+		'Goalkeeper': 1,
+		'Defender' : 2,
+		'Midfielder' : 3,
+		"Forward" : 4
+	}[position]
+def getTeamId(team):
+	return {
+		'Arsenal': 1,
+		'Aston Villa': 2,
+		'Cardiff City': 3,
+		'Chelsea': 4,
+		'Crystal Palace': 5,
+		'Everton': 6,
+		'Fulham': 7,
+		'Hull City': 8,
+		'Liverpool': 9,
+		'Man City': 10,
+		'Man United': 11,
+		'Newcastle': 12,
+		'Norwich': 13,
+		'Southampton': 14,
+		'Stoke City': 15,
+		'Sunderland': 16,
+		'Swansea': 17,
+		'Tottenham': 18,
+		'West Brom': 19,
+		'West Ham': 20
+	}[team]
 
 if __name__ == "__main__":
     main()
