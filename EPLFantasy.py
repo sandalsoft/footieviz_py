@@ -101,9 +101,9 @@ def savePlayer(player):
 			session.add(seasonHistoryORM)
 	
 	# Add array of fixture histories
-		# for fixture_history in player['fixture_history']:
-		fixtureHistoryORM = createFixtureHistoryORM(player)
-		session.add(fixtureHistoryORM)	
+		for fixture_history in player['fixture_history']:
+			fixtureHistoryORM = createFixtureHistoryORM(player_id, fixture_history)
+			session.add(fixtureHistoryORM)	
 
 	# Commit session
 		session.commit()
@@ -348,31 +348,30 @@ def createPlayerORM(player):
 		)
 	return player_orm
 
-def createFixtureHistoryORM(player):
-	for fixture_stats in player['fixture_history']:
-		fixture_history_ORM = FixtureHistory(id=None,
-			player_id = player['id'],
-			fixture_date = fixture_stats['date_text'],
-			game_week = fixture_stats['game_week'],
-			result = fixture_stats['result'],
-			minutes_played = fixture_stats['minutes_played'],
-			goals_scored = fixture_stats['goals_scored'],
-			assists = fixture_stats['assists'],
-			clean_sheets = fixture_stats['clean_sheets'],
-			goals_conceded = fixture_stats['goals_conceded'],
-			own_goals = fixture_stats['own_goals'],
-			penalties_saved = fixture_stats['penalties_saved'],
-			penalties_missed = fixture_stats['penalties_missed'],
-			yellow_cards = fixture_stats['yellow_cards'],
-			red_cards = fixture_stats['red_cards'],
-			saves = fixture_stats['saves'],
-			bonus = fixture_stats['bonus'],
-			ea_sports_ppi = fixture_stats['ea_sports_ppi'],
-			bonuses_points_system = fixture_stats['bonuses_points_system'],
-			net_transfers = fixture_stats['net_transfers'],
-			value = fixture_stats['value'],
-			points = fixture_stats['points'],
-			)
+def createFixtureHistoryORM(player_id, fixture_stats):
+	fixture_history_ORM = FixtureHistory(id=None,
+		player_id = player_id,
+		fixture_date = fixture_stats['date_text'],
+		game_week = fixture_stats['game_week'],
+		result = fixture_stats['result'],
+		minutes_played = fixture_stats['minutes_played'],
+		goals_scored = fixture_stats['goals_scored'],
+		assists = fixture_stats['assists'],
+		clean_sheets = fixture_stats['clean_sheets'],
+		goals_conceded = fixture_stats['goals_conceded'],
+		own_goals = fixture_stats['own_goals'],
+		penalties_saved = fixture_stats['penalties_saved'],
+		penalties_missed = fixture_stats['penalties_missed'],
+		yellow_cards = fixture_stats['yellow_cards'],
+		red_cards = fixture_stats['red_cards'],
+		saves = fixture_stats['saves'],
+		bonus = fixture_stats['bonus'],
+		ea_sports_ppi = fixture_stats['ea_sports_ppi'],
+		bonuses_points_system = fixture_stats['bonuses_points_system'],
+		net_transfers = fixture_stats['net_transfers'],
+		value = fixture_stats['value'],
+		points = fixture_stats['points'],
+		)
 	return fixture_history_ORM
 
 def createSeasonHistoryORM(player):
