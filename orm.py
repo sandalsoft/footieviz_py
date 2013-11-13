@@ -27,8 +27,8 @@ class FixtureHistory(Base):
   __tablename__ = "FixturesHistory"
   id = Column(Integer, primary_key=True, autoincrement=True)
   player_id = Column(Integer, nullable=True)
-  date_text = Column(String(50), nullable=False)
-  gameweek = Column(Integer, nullable=True)
+  fixture_date = Column(String(50), nullable=False)
+  game_week = Column(Integer, nullable=True)
   result = Column(String(50), nullable=False)
   minutes_played = Column(Integer, nullable=True)
   goals_scored = Column(Integer, nullable=True)

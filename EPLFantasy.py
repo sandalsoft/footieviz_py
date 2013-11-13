@@ -54,77 +54,7 @@ def getPlayerData():
 			time.sleep(.2)
 			continue
 
-def createPlayerORM(player):
-	player_orm = Player(id=player['id'],
-		transfers_out =player['transfers_out'],
-		code =player['code'],
-		event_total =player['event_total'],
-		last_season_points =player['last_season_points'],
-		squad_number =player['squad_number'],
-		news_updated =player['news_updated'],
-		event_cost =player['event_cost'],
-		news_added =player['news_added'],
-		web_name =player['web_name'],
-		in_dreamteam =player['in_dreamteam'],
-		team_code =player['team_code'],
-		shirt_image_url =player['shirt_image_url'],
-		first_name =player['first_name'],
-		transfers_out_event =player['transfers_out_event'],
-		element_type_id =player['element_type_id'],
-		max_cost =player['max_cost'],
-		# event_explain_id =player['event_explain_id'],
-		selected_total =player['selected_total'],
-		min_cost =player['min_cost'],
-		# fixture_id =player['fixture_id'],
-		# season_history_id =player['season_history_id'],
-		total_points =player['total_points'],
-		position_id = getPositionId(player['position']),
-		team_id =player['team_id'],
-		status_id= getStatusId(player['status']),
-		added =player['added'],
-		form =player['form'],
-		shirt_mobile_image_url =player['shirt_mobile_image_url'],
-		current_fixture =player['current_fixture'],
-		now_cost =player['now_cost'],
-		points_per_game= player['points_per_game'],
-		transfers_in =player['transfers_in'],
-		news =player['news'],
-		original_cost =player['original_cost'],
-		event_points =player['event_points'],
-		news_return =player['news_return'],
-		# fixture_history_id =player['fixture_history_id'],
-		next_fixture =player['next_fixture'],
-		transfers_in_event =player['transfers_in_event'],
-		selected_by = player['selected_by'],
-		last_name =player['last_name'],
-		photo_mobile_url =player['photo_mobile_url']
-		)
-	return player_orm
 
-def createSeasonHistoryORM(player):
-	for season in player['season_history']:
-		season_history_ORM = SeasonHistory(id=None,
-			player_id = player['id'],
-			season=season['season'],
-			minutes_played = season['minutes_played'],
-		  goals_scored = season['goals_scored'],
-		  assists = season['assists'],
-		  clean_sheets = season['clean_sheets'],
-		  goals_conceded = season['goals_conceded'],
-		  own_goals = season['own_goals'],
-		  penalties_saved = season['penalties_saved'],
-		  penalties_missed = season['penalties_missed'],
-		  yellow_cards = season['yellow_cards'],
-		  red_cards = season['red_cards'],
-		  saves = season['saves'],
-		  bonus = season['bonus'],
-		  ea_sports_ppi = season['ea_sports_ppi'],
-		  # bonuses_points_system = season['bonuses_poin	ts_system'],
-		  net_transfers = season['net_transfers'],
-		  value = season['value'],
-		  points = season['points'],
-			)
-	return season_history_ORM
 #
 # SQLA ORM Insertion
 #
@@ -138,14 +68,24 @@ def savePlayer(player):
 	player_id = int(player['id'])
 	print "Starting ID: " + str(player_id)
 
-# Create Player Object ORM
+# Create and add Player Object ORM to session
 	playerORM = createPlayerORM(player)
-	
+	session.add(playerORM)
 	try:
-		for season in player['season_history']:
-			season_history_ORM = createSeasonHistoryORM(player)
-			session.add(season_history_ORM)
-		session.add(playerORM)
+:FIXME: arrays aren't being iterated.  only 1 season_history and fixture_history is 
+being added to the db at a time?  I'm iteratin in the method, so I shouldn't 
+have to iterate here.  right?
+	# # Add array of season historys
+	# 	for season in player['season_history']:
+		seasonHistoryORM = createSeasonHistoryORM(player)
+		session.add(seasonHistoryORM)
+	
+	# Add array of fixture histories
+		# for fixture_history in player['fixture_history']:
+		fixtureHistoryORM = createFixtureHistoryORM(player)
+		session.add(fixtureHistoryORM)	
+
+	# Commit session
 		session.commit()
 		print "Inserted: " + str(player_id)								
 	except IntegrityError, e:
@@ -180,6 +120,7 @@ def mapJsonToPlayerDict(json_data):
 	player['event_explain'] = json_data['event_explain']
 	player['selected_total'] = json_data['selected']
 	player['min_cost'] = json_data['min_cost']
+
 
 # FIXTURES
 	fixtures = []
@@ -261,8 +202,8 @@ def mapJsonToPlayerDict(json_data):
 	events = []
 	for event in json_data['fixture_history']['all']:
 		fixture_event = {}
-		fixture_event['date'] = event[0]
-		fixture_event['week'] = event[1]
+		fixture_event['date_text'] = event[0]
+		fixture_event['game_week'] = event[1]
 		fixture_event['result'] = event[2]
 		fixture_event['minutes_played'] = event[3]
 		fixture_event['goals_scored'] = event[4]
@@ -276,8 +217,8 @@ def mapJsonToPlayerDict(json_data):
 		fixture_event['red_cards'] = event[12]
 		fixture_event['saves'] = event[13]
 		fixture_event['bonus'] = event[14]
-		fixture_event['EA_Sports_PPI'] = event[15]
-		fixture_event['bous_points_system'] = event[16]
+		fixture_event['ea_sports_ppi'] = event[15]
+		fixture_event['bonuses_points_system'] = event[16]
 		fixture_event['net_transfers'] = event[17]
 		fixture_event['value'] = event[18]
 		fixture_event['points'] = event[19]
@@ -300,7 +241,8 @@ def getStatusId(status):
 		'a': 2,
 		'd': 3,
 		'n': 4,
-		's': 5
+		's': 5,
+		'u': 6
 	}[status]
 
 def getTeamThree(team):
@@ -336,6 +278,108 @@ def getTeamId(team):
 		'West Brom': 19,
 		'West Ham': 20
 	}[team]
+
+	
+
+def createPlayerORM(player):
+	player_orm = Player(id=player['id'],
+		transfers_out =player['transfers_out'],
+		code =player['code'],
+		event_total =player['event_total'],
+		last_season_points =player['last_season_points'],
+		squad_number =player['squad_number'],
+		news_updated =player['news_updated'],
+		event_cost =player['event_cost'],
+		news_added =player['news_added'],
+		web_name =player['web_name'],
+		in_dreamteam =player['in_dreamteam'],
+		team_code =player['team_code'],
+		shirt_image_url =player['shirt_image_url'],
+		first_name =player['first_name'],
+		transfers_out_event =player['transfers_out_event'],
+		element_type_id =player['element_type_id'],
+		max_cost =player['max_cost'],
+		# event_explain_id =player['event_explain_id'],
+		selected_total =player['selected_total'],
+		min_cost =player['min_cost'],
+		# fixture_id =player['fixture_id'],
+		# season_history_id =player['season_history_id'],
+		total_points =player['total_points'],
+		position_id = getPositionId(player['position']),
+		team_id =player['team_id'],
+		status_id= getStatusId(player['status']),
+		added =player['added'],
+		form =player['form'],
+		shirt_mobile_image_url =player['shirt_mobile_image_url'],
+		current_fixture =player['current_fixture'],
+		now_cost =player['now_cost'],
+		points_per_game= player['points_per_game'],
+		transfers_in =player['transfers_in'],
+		news =player['news'],
+		original_cost =player['original_cost'],
+		event_points =player['event_points'],
+		news_return =player['news_return'],
+		# fixture_history_id =player['fixture_history_id'],
+		next_fixture =player['next_fixture'],
+		transfers_in_event =player['transfers_in_event'],
+		selected_by = player['selected_by'],
+		last_name =player['last_name'],
+		photo_mobile_url =player['photo_mobile_url']
+		)
+	return player_orm
+
+def createFixtureHistoryORM(player):
+	for fixture_stats in player['fixture_history']:
+		fixture_history_ORM = FixtureHistory(id=None,
+			player_id = player['id'],
+			fixture_date = fixture_stats['date_text'],
+			game_week = fixture_stats['game_week'],
+			result = fixture_stats['result'],
+			minutes_played = fixture_stats['minutes_played'],
+			goals_scored = fixture_stats['goals_scored'],
+			assists = fixture_stats['assists'],
+			clean_sheets = fixture_stats['clean_sheets'],
+			goals_conceded = fixture_stats['goals_conceded'],
+			own_goals = fixture_stats['own_goals'],
+			penalties_saved = fixture_stats['penalties_saved'],
+			penalties_missed = fixture_stats['penalties_missed'],
+			yellow_cards = fixture_stats['yellow_cards'],
+			red_cards = fixture_stats['red_cards'],
+			saves = fixture_stats['saves'],
+			bonus = fixture_stats['bonus'],
+			ea_sports_ppi = fixture_stats['ea_sports_ppi'],
+			bonuses_points_system = fixture_stats['bonuses_points_system'],
+			net_transfers = fixture_stats['net_transfers'],
+			value = fixture_stats['value'],
+			points = fixture_stats['points'],
+			)
+	return fixture_history_ORM
+
+def createSeasonHistoryORM(player):
+	for season in player['season_history']:
+		season_history_ORM = SeasonHistory(id=None,
+			player_id = player['id'],
+			season=season['season'],
+			minutes_played = season['minutes_played'],
+		  goals_scored = season['goals_scored'],
+		  assists = season['assists'],
+		  clean_sheets = season['clean_sheets'],
+		  goals_conceded = season['goals_conceded'],
+		  own_goals = season['own_goals'],
+		  penalties_saved = season['penalties_saved'],
+		  penalties_missed = season['penalties_missed'],
+		  yellow_cards = season['yellow_cards'],
+		  red_cards = season['red_cards'],
+		  saves = season['saves'],
+		  bonus = season['bonus'],
+		  ea_sports_ppi = season['ea_sports_ppi'],
+		  # bonuses_points_system = season['bonuses_poin	ts_system'],
+		  net_transfers = season['net_transfers'],
+		  value = season['value'],
+		  points = season['points'],
+			)
+	return season_history_ORM
+
 
 if __name__ == "__main__":
     main()

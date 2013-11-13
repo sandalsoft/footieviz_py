@@ -116,8 +116,8 @@ CREATE TABLE Players (
 CREATE TABLE FixturesHistory (
   id INTEGER PRIMARY KEY,
   player_id INTEGER,
-  date_text TEXT,
-  gameweek INTEGER,
+  fixture_date TEXT,
+  game_week INTEGER,
   result TEXT,
   minutes_played INTEGER,
   goals_scored INTEGER,
