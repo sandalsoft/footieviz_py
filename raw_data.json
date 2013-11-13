@@ -1,4 +1,4 @@
-{
+[{
     "transfers_out": 10090,
     "code": 37096,
     "event_total": 0,
@@ -322,7 +322,7 @@
     "team_id": 11,
     "second_name": "Jones",
     "photo_mobile_url": "http://cdn.ismfg.net/static/plfpl/img/shirts/photos/76359.jpg"
-}
+},
 
 {
     "transfers_out": 4073,
@@ -634,7 +634,7 @@
     "team_id": 5,
     "second_name": "O'Keefe",
     "photo_mobile_url": "http://cdn.ismfg.net/static/plfpl/img/shirts/photos/53582.jpg"
-}
+},
 
 {
     "transfers_out": 4895,
@@ -845,7 +845,7 @@
     "team_id": 19,
     "second_name": "Berahino",
     "photo_mobile_url": "http://cdn.ismfg.net/static/plfpl/img/shirts/photos/91972.jpg"
-}
+},
 
 {
     "transfers_out": 1414,
@@ -950,4 +950,4 @@
     "team_id": 16,
     "second_name": "Mitchell",
     "photo_mobile_url": "http://cdn.ismfg.net/static/plfpl/img/shirts/photos/94863.jpg"
-}
+}]
