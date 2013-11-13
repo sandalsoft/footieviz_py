@@ -15,8 +15,13 @@ MAX_PLAYERS = 675
 
 
 def main():
-	json_data = getPlayerData()
+	# json_data = getPlayerData()
+	json_data = loadPlayerData('raw_data.json')
 	# print json_data
+def loadPlayerData(filename):
+	json_data=open(filename)
+	data = json.load(json_data)
+	pprint(data)
 
 def getPlayerData():
 	headers = { 
@@ -72,9 +77,10 @@ def savePlayer(player):
 	playerORM = createPlayerORM(player)
 	session.add(playerORM)
 	try:
-:FIXME: arrays aren't being iterated.  only 1 season_history and fixture_history is 
-being added to the db at a time?  I'm iteratin in the method, so I shouldn't 
-have to iterate here.  right?
+# :FIXME: arrays aren't being iterated.  only 1 season_history and fixture_history is 
+# being added to the db at a time?  I'm iteratin in the method, so I shouldn't 
+# have to iterate here.  right?
+
 	# # Add array of season historys
 	# 	for season in player['season_history']:
 		seasonHistoryORM = createSeasonHistoryORM(player)
