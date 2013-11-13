@@ -95,10 +95,10 @@ def savePlayer(player):
 # have to iterate here.  right?
 
 	# # Add array of season historys
-	# 	for season in player['season_history']:
-		seasonHistoryORM = createSeasonHistoryORM(player)
-		if (seasonHistoryORM):
-			session.add(seasonHistoryORM)
+		if (len(player['season_history']) is not 0):
+			for season in player['season_history']:
+				seasonHistoryORM = createSeasonHistoryORM(player_id, season)
+				session.add(seasonHistoryORM)
 	
 	# Add array of fixture histories
 		for fixture_history in player['fixture_history']:
@@ -374,31 +374,28 @@ def createFixtureHistoryORM(player_id, fixture_stats):
 		)
 	return fixture_history_ORM
 
-def createSeasonHistoryORM(player):
-	if (len(player['season_history']) is 0):
-		return None
-	for season in player['season_history']:
-		season_history_ORM = SeasonHistory(id=None,
-			player_id = player['id'],
-			season=season['season'],
-			minutes_played = season['minutes_played'],
-		  goals_scored = season['goals_scored'],
-		  assists = season['assists'],
-		  clean_sheets = season['clean_sheets'],
-		  goals_conceded = season['goals_conceded'],
-		  own_goals = season['own_goals'],
-		  penalties_saved = season['penalties_saved'],
-		  penalties_missed = season['penalties_missed'],
-		  yellow_cards = season['yellow_cards'],
-		  red_cards = season['red_cards'],
-		  saves = season['saves'],
-		  bonus = season['bonus'],
-		  ea_sports_ppi = season['ea_sports_ppi'],
-		  # bonuses_points_system = season['bonuses_poin	ts_system'],
-		  net_transfers = season['net_transfers'],
-		  value = season['value'],
-		  points = season['points'],
-			)
+def createSeasonHistoryORM(player_id, season):
+	season_history_ORM = SeasonHistory(id=None,
+		player_id = player_id,
+		season=season['season'],
+		minutes_played = season['minutes_played'],
+	  goals_scored = season['goals_scored'],
+	  assists = season['assists'],
+	  clean_sheets = season['clean_sheets'],
+	  goals_conceded = season['goals_conceded'],
+	  own_goals = season['own_goals'],
+	  penalties_saved = season['penalties_saved'],
+	  penalties_missed = season['penalties_missed'],
+	  yellow_cards = season['yellow_cards'],
+	  red_cards = season['red_cards'],
+	  saves = season['saves'],
+	  bonus = season['bonus'],
+	  ea_sports_ppi = season['ea_sports_ppi'],
+	  # bonuses_points_system = season['bonuses_poin	ts_system'],
+	  net_transfers = season['net_transfers'],
+	  value = season['value'],
+	  points = season['points'],
+		)
 	return season_history_ORM
 
 
