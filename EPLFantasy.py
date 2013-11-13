@@ -16,12 +16,17 @@ MAX_PLAYERS = 675
 
 def main():
 	# json_data = getPlayerData()
-	json_data = loadPlayerData('raw_data.json')
+	json_data_all_players = loadPlayerData('raw_data.json')
+	for player_data in json_data_all_players:
+		player = mapJsonToPlayerDict(player_data)
+		savePlayer(player)
 	# print json_data
+
 def loadPlayerData(filename):
 	json_data=open(filename)
 	data = json.load(json_data)
-	pprint(data)
+	return data
+	# pprint(data)
 
 def getPlayerData():
 	headers = { 
@@ -53,9 +58,9 @@ def getPlayerData():
 			print data
 
 		else:
-			player = mapJsonToPlayerDict(json_data)
+			return json_data
 			# pprint(player)
-			savePlayer(player)
+			return player
 			time.sleep(.2)
 			continue
 
@@ -84,7 +89,8 @@ def savePlayer(player):
 	# # Add array of season historys
 	# 	for season in player['season_history']:
 		seasonHistoryORM = createSeasonHistoryORM(player)
-		session.add(seasonHistoryORM)
+		if (seasonHistoryORM):
+			session.add(seasonHistoryORM)
 	
 	# Add array of fixture histories
 		# for fixture_history in player['fixture_history']:
@@ -362,6 +368,8 @@ def createFixtureHistoryORM(player):
 	return fixture_history_ORM
 
 def createSeasonHistoryORM(player):
+	if (len(player['season_history']) is 0):
+		return None
 	for season in player['season_history']:
 		season_history_ORM = SeasonHistory(id=None,
 			player_id = player['id'],
