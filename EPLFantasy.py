@@ -54,22 +54,8 @@ def getPlayerData():
 			time.sleep(.2)
 			continue
 
-
-#
-# SQLA ORM Insertion
-#
-def savePlayer(player):
-	engine = create_engine('sqlite:///dev.db.sqlite')
-# Bind the engine to the metadata of the Base class so that
-	Base.metadata.bind = engine
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession()
-	 
-	player_id = int(player['id'])
-	print "Starting ID: " + str(player_id)
-
-# Create Player Object ORM
-	playerORM = Player(id=player_id,
+def createPlayerORM(player):
+	player_orm = Player(id=player['id'],
 		transfers_out =player['transfers_out'],
 		code =player['code'],
 		event_total =player['event_total'],
@@ -113,16 +99,11 @@ def savePlayer(player):
 		last_name =player['last_name'],
 		photo_mobile_url =player['photo_mobile_url']
 		)
+	return player_orm
 
- # THIS NEED TO GET RAW JSON ARRAY OF SEASON HISTORY
- # player is the newly created object, not jason
-# Create season history Object ORM
-	# season_history = []
-
-	# season_history = SeasonHistory(player['season_history'])
+def createSeasonHistoryORM(player):
 	for season in player['season_history']:
-		
-		season_history = SeasonHistory(id=None,
+		season_history_ORM = SeasonHistory(id=None,
 			player_id = player['id'],
 			season=season['season'],
 			minutes_played = season['minutes_played'],
@@ -143,11 +124,28 @@ def savePlayer(player):
 		  value = season['value'],
 		  points = season['points'],
 			)
-		session.add(season_history)
-	try:
-		session.add(playerORM)
-		# session.add(season_history)
+	return season_history_ORM
+#
+# SQLA ORM Insertion
+#
+def savePlayer(player):
+	engine = create_engine('sqlite:///dev.db.sqlite')
+# Bind the engine to the metadata of the Base class so that
+	Base.metadata.bind = engine
+	DBSession = sessionmaker(bind=engine)
+	session = DBSession()
+	 
+	player_id = int(player['id'])
+	print "Starting ID: " + str(player_id)
 
+# Create Player Object ORM
+	playerORM = createPlayerORM(player)
+	
+	try:
+		for season in player['season_history']:
+			season_history_ORM = createSeasonHistoryORM(player)
+			session.add(season_history_ORM)
+		session.add(playerORM)
 		session.commit()
 		print "Inserted: " + str(player_id)								
 	except IntegrityError, e:
