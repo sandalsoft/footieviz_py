@@ -74,6 +74,36 @@ def getPlayerData(x):
 		# time.sleep(.2)
 		# continue
 
+def createNewsORM(player):
+	news_added = news_updated = news_return = news = None
+	#"2013-10-04T16:01:14 UTC+0000",
+	# if (player['news'] or player['news_updated'] or player['news_added'] or player['news_return']):
+	if (player['news_added']):
+		print 'news_added:'  + player['news_added']
+		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_updated']):
+		print 'news_updated:'  + player['news_updated']
+		news_updated = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_return']):
+		print 'news_return:'  + player['news_return']
+		news_return = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news']):
+		print 'news:'  + player['news']
+		news = player['news']
+	# else:
+	# 	print "No news for " + str(player['id'])
+	# 	return None
+	if (news_added or news_updated or news_return or news):
+		news_orm = News(id=None,
+			player_id = player['id'],
+			news_added = news_added,
+			news_updated = news_updated,
+			news_return = news_return,
+			news = news
+			)
+		return news_orm
+	else:
+		return None
 
 #
 # SQLA ORM Insertion
@@ -93,8 +123,9 @@ def savePlayer(player):
 	session.add(playerORM)
 
 # Create and add News Object ORM to session
-	if (player['news'] or player['news_updated'] or player['news_added'] or player['news_return']):
-		newsORM = createNewsORM(player)
+	newsORM = createNewsORM(player)
+	if (newsORM):
+		print str(player['id']) + " has news entry"
 		session.add(newsORM)
 
 	try:
@@ -231,7 +262,7 @@ def mapJsonToPlayerDict(json_data):
 	for event in json_data['fixture_history']['all']:
 		fixture_event = {}
 		fixture_event['date_text'] = event[0]
-		fixture_event['game_week'] = event[1]
+		fixture_event['game_week'] = event[1]	
 		fixture_event['result'] = event[2]
 		fixture_event['minutes_played'] = event[3]
 		fixture_event['goals_scored'] = event[4]
@@ -305,26 +336,7 @@ def getTeamId(team):
 		'West Ham': 20
 	}[team]
 
-def createNewsORM(player):
-	#"2013-10-04T16:01:14 UTC+0000",
-	news_added = news_updated = news_return = news = None
-	if (player['news_added']):
-		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news_updated']):
-		news_added = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news_return']):
-		news_added = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news']):
-		news = news
-		
-	news_orm = News(id=None,
-		player_id = player['id'],
-		news_added = news_added,
-		news_updated = news_updated,
-		news_return = news_return,
-		news = news
-		)
-	return news_orm
+
 
 def createPlayerORM(player):
 	player_orm = Player(id=player['id'],
@@ -374,6 +386,7 @@ def createPlayerORM(player):
 	return player_orm
 
 def createFixtureHistoryORM(player_id, fixture_stats):
+
 	fixture_history_ORM = FixtureHistory(id=None,
 		player_id = player_id,
 		fixture_date = fixture_stats['date_text'],
