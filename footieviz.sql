@@ -34,6 +34,7 @@ CREATE TABLE Fixtures (
 
 CREATE TABLE Teams (
   id INTEGER PRIMARY KEY,
+  api_name, TEXT,
   name TEXT,
   short_name TEXT
 );

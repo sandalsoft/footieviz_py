@@ -82,7 +82,7 @@ mappings for fixture history and season history:
 
 		Teams player id
 		1 Arsenal
-		
+		60 Cardiff City	
 		180 Hull City
 		200 Liverpool
 		240 Man City

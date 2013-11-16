@@ -114,11 +114,6 @@ class Player(Base):
   # fixture_id = Column(Integer, ForeignKey('Fixtures.id'))
   # fixture = relationship("Fixture", backref="player")
 
-class Position(Base):
-  __tablename__ = "Positions"
-  id = Column(Integer, primary_key=True)
-  name = Column(String(50), nullable=False)
-  short_name = Column(String(4), nullable=False)
 
 class SeasonHistory(Base):
   __tablename__ = "SeasonsHistory"
@@ -145,12 +140,24 @@ class SeasonHistory(Base):
   created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('Players.id')) 
 
-class Teams(Base):
-	__tablename__ = "Teams"
-	id = Column(Integer, primary_key=True)
-	name = Column(String(50), nullable=False)
-	short_name = Column(String(4), nullable=False)
 
+class Position(Base):
+  __tablename__ = "Positions"
+  id = Column(Integer, primary_key=True)
+  name = Column(String(50), nullable=False)
+  short_name = Column(String(4), nullable=False)
+
+class Teams(Base):
+  __tablename__ = "Teams"
+  id = Column(Integer, primary_key=True)
+  api_name = Column(String(50), nullable=False)
+  name = Column(String(50), nullable=False)
+  short_name = Column(String(4), nullable=False)
+
+class Status(Base):
+  __tablename__ = "Statuses"
+  id = Column(Integer, primary_key=True)
+  status = Column(String(), nullable=False)
 
 
 # Create an engine that stores data in the local directory's

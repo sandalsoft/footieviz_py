@@ -14,7 +14,7 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 600
-
+UPDATED_NOW = datetime.datetime.now()
 def main():
 
 # LOAD FROM INTARWEBZ
@@ -99,8 +99,9 @@ def savePlayer(player):
 # Create and add News Object ORM to session
 	newsORM = createNewsORM(player)
 	if (newsORM):
-		print str(player['id']) + " has news entry"
 		session.add(newsORM)
+
+
 # Create and add Fixtures ORM to session
 	fixturesORM = createFixturesORM(player)
 
@@ -170,7 +171,7 @@ def mapJsonToPlayerDict(json_data):
 		myfixture['gameweek'] = int(fixture[1].split(' ')[1])
 
 # Create is_homegame boolean
-		if 'A' not in fixture[2].split(' ')[1]:
+		if 'A' not in fixture[2].split(' (')[1]:
 			myfixture['is_homegame'] = True
 		else:
 			myfixture['is_homegame'] = False
@@ -179,7 +180,8 @@ def mapJsonToPlayerDict(json_data):
 #0 "12 Feb 19:45",
 #1 "Gameweek 26",
 #2 "Newcastle (A)"
-		opponent = fixture[2].split(' ')[0]
+		opponent = fixture[2].split(' (')[0]
+
 		myfixture['opponent_team_id'] = getTeamId(opponent)
 
 # Set player_id
@@ -301,7 +303,7 @@ def getTeamId(team):
 		'Hull City': 8,
 		'Liverpool': 9,
 		'Man City': 10,
-		'Man United': 11,
+		'Man Utd': 11,
 		'Newcastle': 12,
 		'Norwich': 13,
 		'Southampton': 14,
