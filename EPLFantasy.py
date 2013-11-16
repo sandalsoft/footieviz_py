@@ -11,24 +11,28 @@ from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
-MAX_PLAYERS = 251
-
+# MAX_PLAYERS = 675
+# This seems to have changed to ~600 now?
+MAX_PLAYERS = 600
 
 def main():
 
 # LOAD FROM INTARWEBZ
-	for x in range(1, MAX_PLAYERS):
-		json_data = getPlayerData(x)
-		player = mapJsonToPlayerDict(json_data)
-		savePlayer(player)
-		time.sleep(.2)
+	# # int starting_player_id = randrange(1,MAX_PLAYERS)
+	# int starting_player_id = 1
+
+	# for x in range(starting_player_id, MAX_PLAYERS):
+	# 	json_data = getPlayerData(x)
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
+	# 	# time.sleep(.2)
 
 # # LOAD FROM FILE
-# 	json_data_all_players = loadPlayerData('raw_data.json')
-# 	for json_data in json_data_all_players:
-# 		player = mapJsonToPlayerDict(json_data)
-# 		savePlayer(player)
-# 		# print json_data
+	json_data_all_players = loadPlayerData('raw_data.json')
+	for json_data in json_data_all_players:
+		player = mapJsonToPlayerDict(json_data)
+		savePlayer(player)
+		# print json_data
 
 
 
@@ -74,29 +78,6 @@ def getPlayerData(x):
 		# time.sleep(.2)
 		# continue
 
-def createNewsORM(player):
-	news_added = news_updated = news_return = news = None
-	#"2013-10-04T16:01:14 UTC+0000",
-	if (player['news_added']):
-		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news_updated']):
-		news_updated = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news_return']):
-		news_return = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-	if (player['news']):
-		news = player['news']
-
-	if (news_added or news_updated or news_return or news):
-		news_orm = News(id=None,
-			player_id = player['id'],
-			news_added = news_added,
-			news_updated = news_updated,
-			news_return = news_return,
-			news = news
-			)
-		return news_orm
-	else:
-		return None
 
 #
 # SQLA ORM Insertion
@@ -120,12 +101,13 @@ def savePlayer(player):
 	if (newsORM):
 		print str(player['id']) + " has news entry"
 		session.add(newsORM)
+# Create and add Fixtures ORM to session
+	fixturesORM = createFixturesORM(player)
 
+
+# Create Fixtures History for the current year
+	## REFACTOR THIS INTO A METHOD OR CLASS
 	try:
-# :FIXME: arrays aren't being iterated.  only 1 season_history and fixture_history is 
-# being added to the db at a time?  I'm iteratin in the method, so I shouldn't 
-# have to iterate here.  right?
-
 	# # Add array of season historys
 		if (len(player['season_history']) is not 0):
 			for season in player['season_history']:
@@ -147,6 +129,8 @@ def savePlayer(player):
 			
 	# pprint(player, indent=2)
 
+def createFixturesORM(player):
+	pprint(player['fixtures'])
 
 def mapJsonToPlayerDict(json_data):
 	player = {}
@@ -196,7 +180,7 @@ def mapJsonToPlayerDict(json_data):
 #1 "Gameweek 26",
 #2 "Newcastle (A)"
 		opponent = fixture[2].split(' ')[0]
-		myfixture['opponent_team_id'] = getTeamThree(opponent)
+		myfixture['opponent_team_id'] = getTeamId(opponent)
 
 # Set player_id
 		myfixture['player_id'] = player['id']
@@ -378,8 +362,32 @@ def createPlayerORM(player):
 		)
 	return player_orm
 
-def createFixtureHistoryORM(player_id, fixture_stats):
+def createNewsORM(player):
+	news_added = news_updated = news_return = news = None
+	#"2013-10-04T16:01:14 UTC+0000",
+	if (player['news_added']):
+		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_updated']):
+		news_updated = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_return']):
+		news_return = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news']):
+		news = player['news']
 
+	if (news_added or news_updated or news_return or news):
+		news_orm = News(id=None,
+			player_id = player['id'],
+			news_added = news_added,
+			news_updated = news_updated,
+			news_return = news_return,
+			news = news
+			)
+		return news_orm
+	else:
+		return None
+
+
+def createFixtureHistoryORM(player_id, fixture_stats):
 	fixture_history_ORM = FixtureHistory(id=None,
 		player_id = player_id,
 		fixture_date = fixture_stats['date_text'],

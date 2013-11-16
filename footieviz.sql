@@ -1,4 +1,4 @@
-
+-- SQLITE
 CREATE TABLE News (
   id INTEGER PRIMARY KEY,
   news_updated TEXT,
@@ -6,6 +6,7 @@ CREATE TABLE News (
   news TEXT,
   news_return, TEXT,
   player_id INTEGER,
+  created_at TEXT,
   FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 
@@ -15,6 +16,7 @@ CREATE TABLE EventsExplain (
   col2 INTEGER,
   col3 INTEGER,
   player_id INTEGER,
+  created_at TEXT,
   FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 
@@ -25,6 +27,7 @@ CREATE TABLE Fixtures (
   opponent_team_id INTEGER,
   is_homegame INTEGER,
   player_id INTEGER,
+  created_at TEXT,
   FOREIGN KEY(player_id) REFERENCES Players(id),
   FOREIGN KEY(opponent_team_id) REFERENCES Teams(id)
 );
@@ -55,6 +58,7 @@ CREATE TABLE SeasonsHistory (
   value INTEGER,
   points INTEGER,
   player_id INTEGER,
+  created_at TEXT,
   FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 
@@ -104,6 +108,7 @@ CREATE TABLE Players (
   selected_by NUMERIC,
   last_name TEXT,
   photo_mobile_url TEXT,
+  created_at TEXT,
   FOREIGN KEY(status_id) REFERENCES Statuses(id),
   FOREIGN KEY(team_id) REFERENCES Teams(id),
   FOREIGN KEY(position_id) REFERENCES Positions(id)
@@ -133,6 +138,7 @@ CREATE TABLE FixturesHistory (
   net_transfers INTEGER,
   value INTEGER,
   points INTEGER,
+  created_at TEXT,
   FOREIGN KEY(player_id) REFERENCES Players(id)
 );
 

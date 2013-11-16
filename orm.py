@@ -12,6 +12,7 @@ class News(Base):
   news_updated = Column(DateTime, nullable=True)
   news_return = Column(DateTime, nullable=True)
   news = Column(String(50), nullable=True)
+  created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('Players.id'))
 
 class EventExplain(Base):
@@ -20,6 +21,7 @@ class EventExplain(Base):
   minutes_played = Column(Integer, nullable=True)
   col2 = Column(Integer, nullable=True)
   col3 = Column(Integer, nullable=True)
+  created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('Players.id'))
 
 class Fixture(Base):
@@ -28,6 +30,7 @@ class Fixture(Base):
   date_time = Column(DateTime, nullable=False)
   gameweek = Column(Integer, nullable=False)
   is_homegame = Column(Boolean, nullable=False)
+  created_at = Column(DateTime, nullable=False)
   opponent_team_id = Column(Integer, ForeignKey('Teams.id'))
   player_id = Column(Integer, ForeignKey('Players.id')) 
 
@@ -56,6 +59,7 @@ class FixtureHistory(Base):
   net_transfers = Column(Integer, nullable=True)
   value = Column(Integer, nullable=True)
   points = Column(Integer, nullable=True)
+  created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('Players.id')) 
 
 class Player(Base):
@@ -103,7 +107,7 @@ class Player(Base):
   selected_by  = Column(Float, nullable=True)
   last_name= Column(String(50), nullable=True)
   photo_mobile_url= Column(String(250), nullable=True)
-
+  created_at = Column(DateTime, nullable=False)
 # Don't think I need these inverse relationships
   # event_explain_id = Column(Integer, ForeignKey('EventsExplain.id'))
   # event_explains = relationship("EventsExplain", order_by="EventsExplain.id", backref=backref('Players', order_by=id))
@@ -138,6 +142,7 @@ class SeasonHistory(Base):
   value = Column(Integer, nullable=True)
   points = Column(Integer, nullable=True)
   player_id = Column(Integer, nullable=True)
+  created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('Players.id')) 
 
 class Teams(Base):
