@@ -11,24 +11,24 @@ from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
-MAX_PLAYERS = 675
+MAX_PLAYERS = 251
 
 
 def main():
 
 # LOAD FROM INTARWEBZ
-	# for x in range(randrange(1,MAX_PLAYERS), MAX_PLAYERS):
-	# 	json_data = getPlayerData(x)
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
-	# 	time.sleep(.2)
-
-# LOAD FROM FILE
-	json_data_all_players = loadPlayerData('raw_data.json')
-	for json_data in json_data_all_players:
+	for x in range(1, MAX_PLAYERS):
+		json_data = getPlayerData(x)
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
-		# print json_data
+		time.sleep(.2)
+
+# # LOAD FROM FILE
+# 	json_data_all_players = loadPlayerData('raw_data.json')
+# 	for json_data in json_data_all_players:
+# 		player = mapJsonToPlayerDict(json_data)
+# 		savePlayer(player)
+# 		# print json_data
 
 
 
@@ -77,22 +77,15 @@ def getPlayerData(x):
 def createNewsORM(player):
 	news_added = news_updated = news_return = news = None
 	#"2013-10-04T16:01:14 UTC+0000",
-	# if (player['news'] or player['news_updated'] or player['news_added'] or player['news_return']):
 	if (player['news_added']):
-		print 'news_added:'  + player['news_added']
 		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
 	if (player['news_updated']):
-		print 'news_updated:'  + player['news_updated']
 		news_updated = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
 	if (player['news_return']):
-		print 'news_return:'  + player['news_return']
 		news_return = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
 	if (player['news']):
-		print 'news:'  + player['news']
 		news = player['news']
-	# else:
-	# 	print "No news for " + str(player['id'])
-	# 	return None
+
 	if (news_added or news_updated or news_return or news):
 		news_orm = News(id=None,
 			player_id = player['id'],
