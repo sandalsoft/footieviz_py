@@ -14,25 +14,25 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 600
-UPDATED_NOW = datetime.datetime.now()
+NOW = datetime.datetime.now()
 def main():
 
 # LOAD FROM INTARWEBZ
-	# # int starting_player_id = randrange(1,MAX_PLAYERS)
-	# int starting_player_id = 1
+	# int starting_player_id = randrange(1,MAX_PLAYERS)
+	starting_player_id = 1
 
-	# for x in range(starting_player_id, MAX_PLAYERS):
-	# 	json_data = getPlayerData(x)
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
-	# 	# time.sleep(.2)
-
-# # LOAD FROM FILE
-	json_data_all_players = loadPlayerData('raw_data.json')
-	for json_data in json_data_all_players:
+	for x in range(starting_player_id, MAX_PLAYERS):
+		json_data = getPlayerData(x)
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
-		# print json_data
+		# time.sleep(.2)
+
+# # LOAD FROM FILE
+	# json_data_all_players = loadPlayerData('raw_data.json')
+	# for json_data in json_data_all_players:
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
+	# 	# print json_data
 
 
 
@@ -103,8 +103,9 @@ def savePlayer(player):
 
 
 # Create and add Fixtures ORM to session
-	fixturesORM = createFixturesORM(player)
-
+	for fixture in player['fixtures']:
+		fixturesORM = createFixturesORM(player['id'], fixture)
+		session.add(fixturesORM)
 
 # Create Fixtures History for the current year
 	## REFACTOR THIS INTO A METHOD OR CLASS
@@ -130,8 +131,7 @@ def savePlayer(player):
 			
 	# pprint(player, indent=2)
 
-def createFixturesORM(player):
-	pprint(player['fixtures'])
+
 
 def mapJsonToPlayerDict(json_data):
 	player = {}
@@ -317,6 +317,42 @@ def getTeamId(team):
 
 
 
+
+
+
+
+
+######################################################################
+
+
+
+
+####                                    MAP
+
+
+
+######################################################################
+
+
+
+
+
+
+
+
+
+def createFixturesORM(player_id, fixture):
+	# pprint(player['fixtures'])
+	fixture_orm = Fixture(id=None,
+		date_time = fixture['date_time'],
+		gameweek = fixture['gameweek'],
+		is_homegame = fixture['is_homegame'],
+		opponent_team_id = fixture['opponent_team_id'],
+		player_id = player_id,
+		created_at = NOW
+		)
+	return fixture_orm
+
 def createPlayerORM(player):
 	player_orm = Player(id=player['id'],
 		transfers_out =player['transfers_out'],
@@ -324,9 +360,7 @@ def createPlayerORM(player):
 		event_total =player['event_total'],
 		last_season_points =player['last_season_points'],
 		squad_number =player['squad_number'],
-		# news_updated =player['news_updated'],
 		event_cost =player['event_cost'],
-		# news_added =player['news_added'],
 		web_name =player['web_name'],
 		in_dreamteam =player['in_dreamteam'],
 		team_code =player['team_code'],
@@ -335,11 +369,8 @@ def createPlayerORM(player):
 		transfers_out_event =player['transfers_out_event'],
 		element_type_id =player['element_type_id'],
 		max_cost =player['max_cost'],
-		# event_explain_id =player['event_explain_id'],
 		selected_total =player['selected_total'],
 		min_cost =player['min_cost'],
-		# fixture_id =player['fixture_id'],
-		# season_history_id =player['season_history_id'],
 		total_points =player['total_points'],
 		position_id = getPositionId(player['position']),
 		team_id =player['team_id'],
@@ -351,16 +382,14 @@ def createPlayerORM(player):
 		now_cost =player['now_cost'],
 		points_per_game= player['points_per_game'],
 		transfers_in =player['transfers_in'],
-		# news =player['news'],
 		original_cost =player['original_cost'],
 		event_points =player['event_points'],
-		# news_return =player['news_return'],
-		# fixture_history_id =player['fixture_history_id'],
 		next_fixture =player['next_fixture'],
 		transfers_in_event =player['transfers_in_event'],
 		selected_by = player['selected_by'],
 		last_name =player['last_name'],
-		photo_mobile_url =player['photo_mobile_url']
+		photo_mobile_url =player['photo_mobile_url'],
+		created_at = NOW
 		)
 	return player_orm
 
@@ -382,7 +411,8 @@ def createNewsORM(player):
 			news_added = news_added,
 			news_updated = news_updated,
 			news_return = news_return,
-			news = news
+			news = news,
+			created_at = NOW
 			)
 		return news_orm
 	else:
@@ -412,6 +442,7 @@ def createFixtureHistoryORM(player_id, fixture_stats):
 		net_transfers = fixture_stats['net_transfers'],
 		value = fixture_stats['value'],
 		points = fixture_stats['points'],
+		created_at = NOW,
 		)
 	return fixture_history_ORM
 
@@ -436,6 +467,7 @@ def createSeasonHistoryORM(player_id, season):
 	  net_transfers = season['net_transfers'],
 	  value = season['value'],
 	  points = season['points'],
+	  created_at = NOW,
 		)
 	return season_history_ORM
 
