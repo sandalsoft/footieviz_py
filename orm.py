@@ -5,6 +5,15 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+class News(Base):
+  __tablename__ = "News"
+  id = Column(Integer, primary_key=True, autoincrement=True)
+  news_added = Column(DateTime, nullable=True)
+  news_updated = Column(DateTime, nullable=True)
+  news_return = Column(DateTime, nullable=True)
+  news = Column(String(50), nullable=True)
+  player_id = Column(Integer, ForeignKey('Players.id'))
+
 class EventExplain(Base):
   __tablename__ = "EventsExplain"
   id = Column(Integer, primary_key=True, autoincrement=True)
@@ -57,9 +66,9 @@ class Player(Base):
   event_total = Column(Integer, nullable=True)
   last_season_points= Column(Integer, nullable=True)
   squad_number= Column(Integer, nullable=True)
-  news_updated= Column(Integer, nullable=True)
+  # news_updated= Column(Integer, nullable=True)
   event_cost= Column(Integer, nullable=True)
-  news_added= Column(Integer, nullable=True)
+  # news_added= Column(Integer, nullable=True)
   web_name= Column(String(50), nullable=True)
   in_dreamteam= Column(Integer, nullable=True)
   team_code= Column(Integer, nullable=True)
@@ -84,10 +93,10 @@ class Player(Base):
   now_cost= Column(Integer, nullable=True)
   points_per_game  = Column(Float, nullable=True)
   transfers_in= Column(Integer, nullable=True)
-  news= Column(String(500), nullable=True)
+  # news= Column(String(500), nullable=True)
   original_cost= Column(Integer, nullable=True)
   event_points= Column(Integer, nullable=True)
-  news_return= Column(String(500), nullable=True)
+  # news_return= Column(String(500), nullable=True)
   # fixture_history_id= Column(Integer, nullable=True)
   next_fixture= Column(Integer, nullable=True)
   transfers_in_event= Column(Integer, nullable=True)

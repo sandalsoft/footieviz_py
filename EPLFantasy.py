@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 import datetime
-from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory
+from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
@@ -29,6 +29,8 @@ def main():
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
 		# print json_data
+
+
 
 def loadPlayerData(filename):
 	json_data=open(filename)
@@ -89,6 +91,12 @@ def savePlayer(player):
 # Create and add Player Object ORM to session
 	playerORM = createPlayerORM(player)
 	session.add(playerORM)
+
+# Create and add News Object ORM to session
+	if (player['news'] or player['news_updated'] or player['news_added'] or player['news_return']):
+		newsORM = createNewsORM(player)
+		session.add(newsORM)
+
 	try:
 # :FIXME: arrays aren't being iterated.  only 1 season_history and fixture_history is 
 # being added to the db at a time?  I'm iteratin in the method, so I shouldn't 
@@ -251,8 +259,6 @@ def mapJsonToPlayerDict(json_data):
 	player['team_id'] = json_data['team_id']
 	player['last_name'] = json_data['second_name']
 	player['photo_mobile_url'] = json_data['photo_mobile_url']
-
-
 	return player
 
 def getStatusId(status):
@@ -299,7 +305,26 @@ def getTeamId(team):
 		'West Ham': 20
 	}[team]
 
-	
+def createNewsORM(player):
+	#"2013-10-04T16:01:14 UTC+0000",
+	news_added = news_updated = news_return = news = None
+	if (player['news_added']):
+		news_added = datetime.datetime.strptime(player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_updated']):
+		news_added = datetime.datetime.strptime(player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news_return']):
+		news_added = datetime.datetime.strptime(player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
+	if (player['news']):
+		news = news
+		
+	news_orm = News(id=None,
+		player_id = player['id'],
+		news_added = news_added,
+		news_updated = news_updated,
+		news_return = news_return,
+		news = news
+		)
+	return news_orm
 
 def createPlayerORM(player):
 	player_orm = Player(id=player['id'],
@@ -308,9 +333,9 @@ def createPlayerORM(player):
 		event_total =player['event_total'],
 		last_season_points =player['last_season_points'],
 		squad_number =player['squad_number'],
-		news_updated =player['news_updated'],
+		# news_updated =player['news_updated'],
 		event_cost =player['event_cost'],
-		news_added =player['news_added'],
+		# news_added =player['news_added'],
 		web_name =player['web_name'],
 		in_dreamteam =player['in_dreamteam'],
 		team_code =player['team_code'],
@@ -335,10 +360,10 @@ def createPlayerORM(player):
 		now_cost =player['now_cost'],
 		points_per_game= player['points_per_game'],
 		transfers_in =player['transfers_in'],
-		news =player['news'],
+		# news =player['news'],
 		original_cost =player['original_cost'],
 		event_points =player['event_points'],
-		news_return =player['news_return'],
+		# news_return =player['news_return'],
 		# fixture_history_id =player['fixture_history_id'],
 		next_fixture =player['next_fixture'],
 		transfers_in_event =player['transfers_in_event'],
