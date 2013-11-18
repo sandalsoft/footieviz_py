@@ -1,0 +1,1 @@
+ psql -d footieviz-dev -U Eric -W < starting.db.sql
