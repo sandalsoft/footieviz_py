@@ -1,24 +1,2 @@
-1|Arsenal|ARS
-2|Aston Villa|AVL
-3|Cardiff City|CAR
-4|Chelsea|CHE
-5|Crystal Palace|CRY
-6|Everton|EVE
-7|Fulham|FUL
-8|Hull City|HUL
-9|Liverpool|LIV
-10|Manchester City|MC
-11|Manchester United|MUN
-12|Newcastle|NEW
-13|Norwich City|NOR
-14|Southampton|SOU
-15|Stoke City|STK
-16|Sunderland|SUN
-17|Swansea City|SWA
-18|Tottenham Hotspur|TOT
-19|West Bromwich Albion|WBA
-20|West Ham United|WHU
-
-	return {
-		'Goalkeeper': 1,
-		'Defender' : 2
+import boto.rds
+conn = boto.rds.connect_to_region("us-east-1")

@@ -1,68 +1,11 @@
 -- SQLITE
-CREATE TABLE News (
-  id INTEGER PRIMARY KEY,
-  news_updated TEXT,
-  news_added TEXT,
-  news TEXT,
-  news_return, TEXT,
-  player_id INTEGER,
-  created_at TEXT,
-  FOREIGN KEY(player_id) REFERENCES Players(id)
-);
-
-CREATE TABLE EventsExplain (
-  id INTEGER PRIMARY KEY,
-  minutes_played TEXT,
-  col2 INTEGER,
-  col3 INTEGER,
-  player_id INTEGER,
-  created_at TEXT,
-  FOREIGN KEY(player_id) REFERENCES Players(id)
-);
-
-CREATE TABLE Fixtures (
-  id INTEGER PRIMARY KEY,
-  date_time TEXT,
-  gameweek INTEGER,
-  opponent_team_id INTEGER,
-  is_homegame INTEGER,
-  player_id INTEGER,
-  created_at TEXT,
-  FOREIGN KEY(player_id) REFERENCES Players(id),
-  FOREIGN KEY(opponent_team_id) REFERENCES Teams(id)
-);
 
 CREATE TABLE Teams (
   id INTEGER PRIMARY KEY,
-  api_name, TEXT,
+  api_name TEXT,
   name TEXT,
   short_name TEXT
 );
-
-CREATE TABLE SeasonsHistory (
-  id INTEGER PRIMARY KEY,
-  season TEXT,
-  minutes_played INTEGER,
-  goals_scored INTEGER,
-  assists INTEGER,
-  clean_sheets INTEGER,
-  goals_conceded INTEGER,
-  own_goals INTEGER,
-  penalties_saved INTEGER,
-  penalties_missed INTEGER,
-  yellow_cards INTEGER,
-  red_cards INTEGER,
-  saves INTEGER,
-  bonus INTEGER,
-  ea_sports_ppi INTEGER,
-  net_transfers INTEGER,
-  value INTEGER,
-  points INTEGER,
-  player_id INTEGER,
-  created_at TEXT,
-  FOREIGN KEY(player_id) REFERENCES Players(id)
-);
-
 CREATE TABLE Statuses (
   id INTEGER PRIMARY KEY,
   status TEXT
@@ -72,6 +15,7 @@ CREATE TABLE Positions (
   id INTEGER PRIMARY KEY,
   name TEXT
 );
+
 
 CREATE TABLE Players (
   id INTEGER PRIMARY KEY,
@@ -114,6 +58,68 @@ CREATE TABLE Players (
   FOREIGN KEY(team_id) REFERENCES Teams(id),
   FOREIGN KEY(position_id) REFERENCES Positions(id)
 );
+
+CREATE TABLE News (
+  id INTEGER PRIMARY KEY,
+  news_updated TEXT,
+  news_added TEXT,
+  news TEXT,
+  news_return TEXT,
+  player_id INTEGER,
+  created_at TEXT,
+  FOREIGN KEY(player_id) REFERENCES Players(id)
+);
+
+CREATE TABLE EventsExplain (
+  id INTEGER PRIMARY KEY,
+  minutes_played TEXT,
+  col2 INTEGER,
+  col3 INTEGER,
+  player_id INTEGER,
+  created_at TEXT,
+  FOREIGN KEY(player_id) REFERENCES Players(id)
+);
+
+CREATE TABLE Fixtures (
+  id INTEGER PRIMARY KEY,
+  date_time TEXT,
+  gameweek INTEGER,
+  opponent_team_id INTEGER,
+  is_homegame INTEGER,
+  player_id INTEGER,
+  created_at TEXT,
+  FOREIGN KEY(player_id) REFERENCES Players(id),
+  FOREIGN KEY(opponent_team_id) REFERENCES Teams(id)
+);
+
+
+
+CREATE TABLE SeasonsHistory (
+  id INTEGER PRIMARY KEY,
+  season TEXT,
+  minutes_played INTEGER,
+  goals_scored INTEGER,
+  assists INTEGER,
+  clean_sheets INTEGER,
+  goals_conceded INTEGER,
+  own_goals INTEGER,
+  penalties_saved INTEGER,
+  penalties_missed INTEGER,
+  yellow_cards INTEGER,
+  red_cards INTEGER,
+  saves INTEGER,
+  bonus INTEGER,
+  ea_sports_ppi INTEGER,
+  net_transfers INTEGER,
+  value INTEGER,
+  points INTEGER,
+  player_id INTEGER,
+  created_at TEXT,
+  FOREIGN KEY(player_id) REFERENCES Players(id)
+);
+
+
+
 
 
 CREATE TABLE FixturesHistory (
