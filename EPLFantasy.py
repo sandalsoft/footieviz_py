@@ -10,6 +10,8 @@ import datetime
 from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
+AWS_USERNAME = "footiedb"
+AWS_PASSWORD = "t79qfegiu"
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
@@ -19,20 +21,20 @@ def main():
 
 # LOAD FROM INTARWEBZ
 	# int starting_player_id = randrange(1,MAX_PLAYERS)
-	starting_player_id = 1
+	# starting_player_id = 1
 
-	for x in range(starting_player_id, MAX_PLAYERS):
-		json_data = getPlayerData(x)
-		player = mapJsonToPlayerDict(json_data)
-		savePlayer(player)
+	# for x in range(starting_player_id, MAX_PLAYERS):
+	# 	json_data = getPlayerData(x)
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
 		# time.sleep(.2)
 
 # # LOAD FROM FILE
-	# json_data_all_players = loadPlayerData('raw_data.json')
-	# for json_data in json_data_all_players:
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
-	# 	# print json_data
+	json_data_all_players = loadPlayerData('raw_data.json')
+	for json_data in json_data_all_players:
+		player = mapJsonToPlayerDict(json_data)
+		savePlayer(player)
+		# print json_data
 
 
 
@@ -83,7 +85,8 @@ def getPlayerData(x):
 # SQLA ORM Insertion
 #
 def savePlayer(player):
-	engine = create_engine('sqlite:///dev.db.sqlite')
+	# engine = create_engine('sqlite:///dev.db.sqlite')
+	engine = create_engine('postgresql://Eric:@localhost/footieviz')
 # Bind the engine to the metadata of the Base class so that
 	Base.metadata.bind = engine
 	DBSession = sessionmaker(bind=engine)
