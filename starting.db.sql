@@ -1,8 +1,8 @@
 
 
-DROP TABLE IF EXISTS "statuses";
+DROP TABLE "statuses" CASCADE;
 CREATE TABLE statuses (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   status TEXT
 );
 INSERT INTO "statuses" VALUES(1,'i');
@@ -15,9 +15,9 @@ INSERT INTO "statuses" VALUES(6,'u');
 
 
 
-DROP TABLE IF EXISTS "positions";
+DROP TABLE  "positions" CASCADE;
 CREATE TABLE positions (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name TEXT
 );
 INSERT INTO "positions" VALUES(1,'Goalkeeper');
@@ -28,13 +28,14 @@ INSERT INTO "positions" VALUES(4,'Forward');
 
 
 
-DROP TABLE IF EXISTS "teams";
+DROP TABLE  "teams" CASCADE;
 CREATE TABLE teams (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   api_name TEXT,
   name TEXT,
   short_name TEXT);
 INSERT INTO "teams" VALUES(1,'Arsenal','Arsenal','ARS');
+INSERT INTO "teams" VALUES(2,'Aston Villa','Aston Villa','AV');
 INSERT INTO "teams" VALUES(3,'Cardiff City','Cardiff City','CAR');
 INSERT INTO "teams" VALUES(4,'Chelsea','Chelsea','CHE');
 INSERT INTO "teams" VALUES(5,'Crystal Palace','Crystal Palace','CRY');
@@ -55,9 +56,9 @@ INSERT INTO "teams" VALUES(19,'West Brom','West Bromwich Albion','WBA');
 INSERT INTO "teams" VALUES(20,'West Ham','West Ham United','WHU');
 
 
-DROP TABLE IF EXISTS "players";
+DROP TABLE  "players" CASCADE;
 CREATE TABLE players (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   transfers_out INTEGER,
   code INTEGER,
   event_total INTEGER,
@@ -65,7 +66,7 @@ CREATE TABLE players (
   squad_number INTEGER,
   event_cost INTEGER,
   web_name TEXT,
-  in_dreamteam INTEGER,
+  in_dreamteam BOOLEAN,
   team_code INTEGER,
   shirt_image_url TEXT,
   first_name TEXT,
@@ -81,13 +82,13 @@ CREATE TABLE players (
   added TEXT,
   form NUMERIC,
   shirt_mobile_image_url TEXT,
-  current_fixture INTEGER,
+  current_fixture TEXT,
   now_cost INTEGER,
   points_per_game NUMERIC,
   transfers_in INTEGER,
   original_cost INTEGER,
   event_points INTEGER,
-  next_fixture INTEGER,
+  next_fixture TEXT,
   transfers_in_event INTEGER,
   selected_by NUMERIC,
   last_name TEXT,
@@ -100,9 +101,9 @@ CREATE TABLE players (
 
 
 
-DROP TABLE IF EXISTS "eventsexplain";
+DROP TABLE  "eventsexplain" CASCADE;
 CREATE TABLE eventsexplain (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   minutes_played TEXT,
   col2 INTEGER,
   col3 INTEGER,
@@ -112,23 +113,23 @@ CREATE TABLE eventsexplain (
 );
 
 
-DROP TABLE IF EXISTS "fixtures";
+DROP TABLE  "fixtures" CASCADE;
 CREATE TABLE fixtures (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   date_time TEXT,
   gameweek INTEGER,
   opponent_team_id INTEGER,
-  is_homegame INTEGER,
+  is_homegame BOOLEAN,
   player_id INTEGER,
   created_at TEXT,
-  FOREIGN KEY(player_id) REFERENCES players(id),
-  FOREIGN KEY(opponent_team_id) REFERENCES teams(id)
+  FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE,
+  FOREIGN KEY(opponent_team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
 
-DROP TABLE IF EXISTS "fixtureshistory";
+DROP TABLE  "fixtureshistory" CASCADE;
 CREATE TABLE fixtureshistory (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   player_id INTEGER,
   fixture_date TEXT,
   game_week INTEGER,
@@ -155,9 +156,9 @@ CREATE TABLE fixtureshistory (
 );
 
 
-DROP TABLE IF EXISTS "news";
+DROP TABLE  "news" CASCADE;
 CREATE TABLE news (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   news_updated TEXT,
   news_added TEXT,
   news TEXT,
@@ -169,9 +170,9 @@ CREATE TABLE news (
 
 
 
-DROP TABLE IF EXISTS "seasonshistory";
+DROP TABLE  "seasonshistory" CASCADE;
 CREATE TABLE seasonshistory (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   season TEXT,
   minutes_played INTEGER,
   goals_scored INTEGER,
