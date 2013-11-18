@@ -15,8 +15,15 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 600
 NOW = datetime.datetime.now()
+
+# Local SQLIte
 # engine = create_engine('sqlite:///dev.db.sqlite')
-engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
+
+# Local Postgres
+# engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
+
+# AWS dev
+engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
 
 def main():
 
