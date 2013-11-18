@@ -6,37 +6,37 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 class News(Base):
-  __tablename__ = "News"
+  __tablename__ = "news"
   id = Column(Integer, primary_key=True, autoincrement=True)
   news_added = Column(DateTime, nullable=True)
   news_updated = Column(DateTime, nullable=True)
   news_return = Column(DateTime, nullable=True)
   news = Column(String(50), nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('Players.id'))
+  player_id = Column(Integer, ForeignKey('players.id'))
 
 class EventExplain(Base):
-  __tablename__ = "EventsExplain"
+  __tablename__ = "eventsexplain"
   id = Column(Integer, primary_key=True, autoincrement=True)
   minutes_played = Column(Integer, nullable=True)
   col2 = Column(Integer, nullable=True)
   col3 = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('Players.id'))
+  player_id = Column(Integer, ForeignKey('players.id'))
 
 class Fixture(Base):
-  __tablename__ = "Fixtures"
+  __tablename__ = "fixtures"
   id = Column(Integer, primary_key=True, autoincrement=True)
   date_time = Column(DateTime, nullable=False)
   gameweek = Column(Integer, nullable=False)
   is_homegame = Column(Boolean, nullable=False)
   created_at = Column(DateTime, nullable=False)
-  opponent_team_id = Column(Integer, ForeignKey('Teams.id'))
-  player_id = Column(Integer, ForeignKey('Players.id')) 
+  opponent_team_id = Column(Integer, ForeignKey('teams.id'))
+  player_id = Column(Integer, ForeignKey('players.id')) 
 
 
 class FixtureHistory(Base):
-  __tablename__ = "FixturesHistory"
+  __tablename__ = "fixtureshistory"
   id = Column(Integer, primary_key=True, autoincrement=True)
   player_id = Column(Integer, nullable=True)
   fixture_date = Column(String(50), nullable=False)
@@ -60,10 +60,10 @@ class FixtureHistory(Base):
   value = Column(Integer, nullable=True)
   points = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('Players.id')) 
+  player_id = Column(Integer, ForeignKey('players.id')) 
 
 class Player(Base):
-  __tablename__ = "Players"
+  __tablename__ = "players"
   id = Column(Integer, primary_key=True)
   transfers_out = Column(Integer, nullable=True)
   code = Column(Integer, nullable=True)
@@ -102,7 +102,7 @@ class Player(Base):
   created_at = Column(DateTime, nullable=False)
 
 class SeasonHistory(Base):
-  __tablename__ = "SeasonsHistory"
+  __tablename__ = "seasonshistory"
   id = Column(Integer, primary_key=True, autoincrement=True)
   season = Column(String(10), nullable=False)
   minutes_played = Column(Integer, nullable=True)
@@ -124,32 +124,32 @@ class SeasonHistory(Base):
   points = Column(Integer, nullable=True)
   player_id = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('Players.id')) 
+  player_id = Column(Integer, ForeignKey('players.id')) 
 
 
 class Position(Base):
-  __tablename__ = "Positions"
+  __tablename__ = "positions"
   id = Column(Integer, primary_key=True)
   name = Column(String(50), nullable=False)
   short_name = Column(String(4), nullable=False)
 
 class Teams(Base):
-  __tablename__ = "Teams"
+  __tablename__ = "teams"
   id = Column(Integer, primary_key=True)
   api_name = Column(String(50), nullable=False)
   name = Column(String(50), nullable=False)
   short_name = Column(String(4), nullable=False)
 
 class Status(Base):
-  __tablename__ = "Statuses"
+  __tablename__ = "statuses"
   id = Column(Integer, primary_key=True)
   status = Column(String(), nullable=False)
 
 
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.
-engine = create_engine('sqlite:///sqlalchemy_example.db')
+
  
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)

@@ -10,31 +10,32 @@ import datetime
 from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
-AWS_USERNAME = "footiedb"
-AWS_PASSWORD = "t79qfegiu"
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 600
 NOW = datetime.datetime.now()
+# engine = create_engine('sqlite:///dev.db.sqlite')
+engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
+
 def main():
 
 # LOAD FROM INTARWEBZ
-	# int starting_player_id = randrange(1,MAX_PLAYERS)
-	# starting_player_id = 1
+	# starting_player_id = randrange(1,MAX_PLAYERS)
+	starting_player_id = 1
 
-	# for x in range(starting_player_id, MAX_PLAYERS):
-	# 	json_data = getPlayerData(x)
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
-		# time.sleep(.2)
-
-# # LOAD FROM FILE
-	json_data_all_players = loadPlayerData('raw_data.json')
-	for json_data in json_data_all_players:
+	for x in range(starting_player_id, MAX_PLAYERS):
+		json_data = getPlayerData(x)
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
-		# print json_data
+		time.sleep(.2)
+
+# # LOAD FROM FILE
+	# json_data_all_players = loadPlayerData('raw_data.json')
+	# for json_data in json_data_all_players:
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
+	# 	# print json_data
 
 
 
@@ -85,8 +86,7 @@ def getPlayerData(x):
 # SQLA ORM Insertion
 #
 def savePlayer(player):
-	# engine = create_engine('sqlite:///dev.db.sqlite')
-	engine = create_engine('postgresql://Eric:@localhost/footieviz')
+
 # Bind the engine to the metadata of the Base class so that
 	Base.metadata.bind = engine
 	DBSession = sessionmaker(bind=engine)
@@ -98,6 +98,7 @@ def savePlayer(player):
 # Create and add Player Object ORM to session
 	playerORM = createPlayerORM(player)
 	session.add(playerORM)
+	session.commit()
 
 # Create and add News Object ORM to session
 	newsORM = createNewsORM(player)
@@ -128,7 +129,7 @@ def savePlayer(player):
 		session.commit()
 		print "Inserted: " + str(player_id)								
 	except IntegrityError, e:
-		print "Record already exists: " + e
+		print "INTEGRITY ERROR YO: " + str(e)
 	else:
 		pass
 			
@@ -356,7 +357,7 @@ def createFixturesORM(player_id, fixture):
 		)
 	return fixture_orm
 
-def createPlayerORM(player):
+def createPlayerORM(player):	
 	player_orm = Player(id=player['id'],
 		transfers_out =player['transfers_out'],
 		code =player['code'],
