@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import urllib2
 import json
+import sys
 from pprint import pprint
 import time
 from sqlalchemy import create_engine
@@ -20,29 +21,35 @@ NOW = datetime.datetime.now()
 # engine = create_engine('sqlite:///dev.db.sqlite')
 
 # Local Postgres
-# engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
+engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
 
 # AWS dev
-engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
+# engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
 
 def main():
 
 # LOAD FROM INTARWEBZ
 	# starting_player_id = randrange(1,MAX_PLAYERS)
-	starting_player_id = 1
+	if (len(sys.argv) > 1):
+		starting_player_id = sys.argv[1]
+	else:
+		starting_player_id = 1
 
-	for x in range(starting_player_id, MAX_PLAYERS):
-		json_data = getPlayerData(x)
-		player = mapJsonToPlayerDict(json_data)
-		savePlayer(player)
-		# time.sleep(.2)
-
-# # LOAD FROM FILE
-	# json_data_all_players = loadPlayerData('raw_data.json')
-	# for json_data in json_data_all_players:
+	print "STARRING ID: " + str(starting_player_id)
+	# for x in range(starting_player_id, MAX_PLAYERS):
+	# 	json_data = getPlayerData(x)
 	# 	player = mapJsonToPlayerDict(json_data)
 	# 	savePlayer(player)
-	# 	# print json_data
+
+
+	# 	# time.sleep(.2)
+
+# # LOAD FROM FILE
+	json_data_all_players = loadPlayerData('raw_data.json')
+	for json_data in json_data_all_players:
+		player = mapJsonToPlayerDict(json_data)
+		savePlayer(player)
+		# print json_data
 
 
 
