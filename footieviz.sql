@@ -1,4 +1,4 @@
--- SQLITE
+
 -- postgres input: /path/to/psql -d database -U username -W < /the/path/to/sqlite-dumpfile.sql
 
 CREATE TABLE teams (

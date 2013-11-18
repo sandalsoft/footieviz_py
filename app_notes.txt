@@ -1,6 +1,14 @@
 App Notes.txt
 - Roboto-9 font
 
+import boto.rds
+conn = boto.rds.connect_to_region("us-east-1")
+conn.get_all_dbinstances("footieviz-dev")[0].endpoint
+
+- AWS enpoint:
+	footieviz-dev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com', 5432
+
+	
 
 Interesting stack trace when hitting a url for player 
 http://fantasy.premierleague.com/web/api/elements/659/
