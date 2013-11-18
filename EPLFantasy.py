@@ -35,7 +35,7 @@ def main():
 		json_data = getPlayerData(x)
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
-		time.sleep(.2)
+		# time.sleep(.2)
 
 # # LOAD FROM FILE
 	# json_data_all_players = loadPlayerData('raw_data.json')
