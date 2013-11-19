@@ -14,7 +14,7 @@ from random import randrange
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
-MAX_PLAYERS = 600
+MAX_PLAYERS = 601
 NOW = datetime.datetime.now()
 
 # Local SQLIte
