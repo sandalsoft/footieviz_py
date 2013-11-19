@@ -1,6 +1,8 @@
 
 -- postgres input: /path/to/psql -d database -U username -W < /the/path/to/sqlite-dumpfile.sql
 
+-- AWS Endpoint: footieviz-dev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com:5432
+
 CREATE TABLE teams (
   id INTEGER PRIMARY KEY,
   api_name TEXT,
