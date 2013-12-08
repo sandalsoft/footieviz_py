@@ -16,6 +16,7 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 601
 NOW = datetime.datetime.now()
+ERROR_PLAYERS = []
 
 # Local SQLIte
 # engine = create_engine('sqlite:///dev.db.sqlite')
@@ -23,8 +24,11 @@ NOW = datetime.datetime.now()
 # Local Postgres
 # engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
 
-# AWS dev
+# AWS postgres dev
 engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
+
+# AWS mysql dev
+engine = create_engine('mysql://footiedb:FOOTIEd33b33@footivizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
 
 def main():
 
@@ -39,9 +43,14 @@ def main():
 
 	for x in range(starting_player_id, MAX_PLAYERS):
 		json_data = getPlayerData(x)
+		if (json_data == None):
+			continue
+
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
 
+
+	processErrorPlayerIds()
 
 	# 	# time.sleep(.2)
 
@@ -52,7 +61,15 @@ def main():
 	# 	savePlayer(player)
 	# 	# print json_data
 
-
+def processErrorPlayerIds():
+	print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+	for player_id in ERROR_PLAYERS:
+		json_data = getPlayerData(x)
+		if (json_data == None):
+			continue
+		print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+		player = mapJsonToPlayerDict(json_data)
+		savePlayer(player)
 
 def loadPlayerData(filename):
 	json_data=open(filename)
@@ -88,6 +105,8 @@ def getPlayerData(x):
 		print "ERROR: JSON value decoding error on id " + str(x)
 		print response.info()
 		print data
+		ERROR_PLAYERS.append(x)
+		return None
 
 	else:
 		return json_data
