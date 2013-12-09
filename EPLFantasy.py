@@ -25,7 +25,7 @@ ERROR_PLAYERS = []
 # engine = create_engine('postgresql://Eric:@localhost/footieviz-dev')
 
 # AWS postgres dev
-engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
+# engine = create_engine('postgresql://footiedb:FOOTIEd33b33@footievizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
 
 # AWS mysql dev
 engine = create_engine('mysql://footiedb:FOOTIEd33b33@footivizdev.c3hd4gvq8fyh.us-east-1.rds.amazonaws.com/footievizdev')
@@ -44,6 +44,7 @@ def main():
 	for x in range(starting_player_id, MAX_PLAYERS):
 		json_data = getPlayerData(x)
 		if (json_data == None):
+			print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
 			continue
 
 		player = mapJsonToPlayerDict(json_data)
@@ -67,7 +68,6 @@ def processErrorPlayerIds():
 		json_data = getPlayerData(x)
 		if (json_data == None):
 			continue
-		print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
 
@@ -79,14 +79,7 @@ def loadPlayerData(filename):
 
 def getPlayerData(x):
 	headers = { 
-			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
-			# 'Host' : 'fantasy.premierleague.com',
-			# 'DNT' : '1',
-			# 'Connection' : 'keep-alive',
-			# 'Cache-Control' : 'max-age=0',
-			# 'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			# 'Accept-Encoding' : 'gzip,deflate,sdch',
-			# 'Accept-Language' : 'en-US,en;q=0.8'
+			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36'
 	}
 
 	
@@ -103,8 +96,8 @@ def getPlayerData(x):
 	except ValueError:
 		# Decoding failed
 		print "ERROR: JSON value decoding error on id " + str(x)
-		print response.info()
-		print data
+		# print response.info()
+		# print data
 		ERROR_PLAYERS.append(x)
 		return None
 
