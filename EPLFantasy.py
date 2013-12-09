@@ -67,6 +67,9 @@ def processErrorPlayerIds():
 	for player_id in ERROR_PLAYERS:
 		json_data = getPlayerData(player_id)
 		if (json_data == None):
+			print "PERSISTENT ERROR WITH " + str(player_id)
+			with open(ERROR_PLAYERS.txt, "a") as myfile:
+			    myfile.write(player_id)
 			continue
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
