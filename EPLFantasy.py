@@ -65,7 +65,7 @@ def main():
 def processErrorPlayerIds():
 	print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
 	for player_id in ERROR_PLAYERS:
-		json_data = getPlayerData(x)
+		json_data = getPlayerData(player_id)
 		if (json_data == None):
 			continue
 		player = mapJsonToPlayerDict(json_data)
