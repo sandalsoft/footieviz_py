@@ -388,6 +388,16 @@ def createFixturesORM(player_id, fixture):
 	return fixture_orm
 
 def createPlayerORM(player):	
+
+	current_fixture_str = player['current_fixture']
+	if 'A' not in current_fixture_str.split(' (')[1]:
+		current_fixture_is_home = True
+	else:
+		current_fixture_is_home = False
+
+	opponent = current_fixture_str.split(' ')[0] 
+	current_fixture_team_id = getTeamId(opponent)
+
 	player_orm = Player(id=player['id'],
 		transfers_out =player['transfers_out'],
 		code =player['code'],
@@ -423,6 +433,8 @@ def createPlayerORM(player):
 		selected_by = player['selected_by'],
 		last_name =player['last_name'],
 		photo_mobile_url =player['photo_mobile_url'],
+		current_fixture_is_home = current_fixture_is_home,
+		current_fixture_team_id = current_fixture_team_id,
 		created_at = NOW
 		)
 	return player_orm

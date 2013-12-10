@@ -100,6 +100,8 @@ class Player(Base):
   last_name= Column(String(50), nullable=True)
   photo_mobile_url= Column(String(250), nullable=True)
   created_at = Column(DateTime, nullable=False)
+  current_fixture_id = Column(Integer, nullable=True)
+  current_fixture_is_home = Column(Boolean, nullable=False)
 
 class SeasonHistory(Base):
   __tablename__ = "seasonshistory"
