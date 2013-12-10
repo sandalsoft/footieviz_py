@@ -214,7 +214,7 @@ def mapJsonToPlayerDict(json_data):
 #0 "12 Feb 19:45",
 #1 "Gameweek 26",
 #2 "Newcastle (A)"
-		opponent = fixture[2]split(' (')[0]
+		opponent = fixture[2].split(' (')[0]
 
 		myfixture['opponent_team_id'] = getTeamId(opponent)
 
