@@ -214,7 +214,7 @@ def mapJsonToPlayerDict(json_data):
 #0 "12 Feb 19:45",
 #1 "Gameweek 26",
 #2 "Newcastle (A)"
-		opponent = fixture[2].split(' (')[0]
+		opponent = fixture[2]split(' (')[0]
 
 		myfixture['opponent_team_id'] = getTeamId(opponent)
 
@@ -395,7 +395,7 @@ def createPlayerORM(player):
 	else:
 		current_fixture_is_home = False
 
-	opponent = current_fixture_str.split(' ')[0] 
+	opponent = current_fixture_str.split(' (')[0] 
 	current_fixture_team_id = getTeamId(opponent)
 
 	player_orm = Player(id=player['id'],
