@@ -50,7 +50,6 @@ def main():
 		player = mapJsonToPlayerDict(json_data)
 		savePlayer(player)
 
-
 	processErrorPlayerIds()
 
 	# 	# time.sleep(.2)
@@ -64,6 +63,7 @@ def main():
 
 def processErrorPlayerIds():
 	print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+    print ERROR_PLAYERS
 	for player_id in ERROR_PLAYERS:
 		json_data = getPlayerData(player_id)
 		if (json_data == None):
@@ -81,11 +81,11 @@ def loadPlayerData(filename):
 	# pprint(data)
 
 def getPlayerData(x):
-	headers = { 
+	headers = {
 			'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36'
 	}
 
-	
+
 	stats_url = FANTASY_STATS_BASE_URL + str(x)
 	try:
 		req = urllib2.Request(stats_url, None, headers)
@@ -121,7 +121,7 @@ def savePlayer(player):
 	Base.metadata.bind = engine
 	DBSession = sessionmaker(bind=engine)
 	session = DBSession()
-	 
+
 	player_id = int(player['id'])
 	print "Starting ID: " + str(player_id)
 
@@ -149,20 +149,20 @@ def savePlayer(player):
 			for season in player['season_history']:
 				seasonHistoryORM = createSeasonHistoryORM(player_id, season)
 				session.add(seasonHistoryORM)
-	
+
 	# Add array of fixture histories
 		for fixture_history in player['fixture_history']:
 			fixtureHistoryORM = createFixtureHistoryORM(player_id, fixture_history)
-			session.add(fixtureHistoryORM)	
+			session.add(fixtureHistoryORM)
 
 	# Commit session
 		session.commit()
-		print "Inserted: " + str(player_id)								
+		print "Inserted: " + str(player_id)
 	except IntegrityError, e:
 		print "INTEGRITY ERROR YO: " + str(e)
 	else:
 		pass
-			
+
 	# pprint(player, indent=2)
 
 
@@ -201,7 +201,7 @@ def mapJsonToPlayerDict(json_data):
 		dt = datetime.datetime.strptime(fixture[0] + " 2013", '%d %b %H:%M %Y')
 		myfixture['date_time'] = dt
 
-# Create gameweek int 
+# Create gameweek int
 		myfixture['gameweek'] = int(fixture[1].split(' ')[1])
 
 # Create is_homegame boolean
@@ -275,7 +275,7 @@ def mapJsonToPlayerDict(json_data):
 	for event in json_data['fixture_history']['all']:
 		fixture_event = {}
 		fixture_event['date_text'] = event[0]
-		fixture_event['game_week'] = event[1]	
+		fixture_event['game_week'] = event[1]
 		fixture_event['result'] = event[2]
 		fixture_event['minutes_played'] = event[3]
 		fixture_event['goals_scored'] = event[4]
@@ -296,7 +296,7 @@ def mapJsonToPlayerDict(json_data):
 		fixture_event['points'] = event[19]
 		events.append(fixture_event)
 	player['fixture_history'] = events
-	
+
 	player['next_fixture'] = json_data['next_fixture']
 	player['transfers_in_event'] = json_data['transfers_in_event']
 	player['selected_by'] = json_data['selected_by']
@@ -387,7 +387,7 @@ def createFixturesORM(player_id, fixture):
 		)
 	return fixture_orm
 
-def createPlayerORM(player):	
+def createPlayerORM(player):
 
 	current_fixture_str = player['current_fixture']
 	if 'A' not in current_fixture_str.split(' (')[1]:
@@ -395,7 +395,7 @@ def createPlayerORM(player):
 	else:
 		current_fixture_is_home = False
 
-	opponent = current_fixture_str.split(' (')[0] 
+	opponent = current_fixture_str.split(' (')[0]
 	current_fixture_team_id = getTeamId(opponent)
 
 	player_orm = Player(id=player['id'],
@@ -466,6 +466,14 @@ def createNewsORM(player):
 
 
 def createFixtureHistoryORM(player_id, fixture_stats):
+
+	# home_team_id =
+	# away_team_id =
+	# winning_team_id =
+	# did_win_match =   #bool
+	# winning_team_goals =
+	# losing_team_goals =
+
 	fixture_history_ORM = FixtureHistory(id=None,
 		player_id = player_id,
 		fixture_date = fixture_stats['date_text'],
