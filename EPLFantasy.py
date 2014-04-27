@@ -34,45 +34,45 @@ def main():
 
 # LOAD FROM INTARWEBZ
 	# starting_player_id = randrange(1,MAX_PLAYERS)
-	if (len(sys.argv) > 1):
-		starting_player_id = int(sys.argv[1])
-	else:
-		starting_player_id = 1
+	# if (len(sys.argv) > 1):
+	# 	starting_player_id = int(sys.argv[1])
+	# else:
+	# 	starting_player_id = 1
 
-	print "STARTING ID: " + str(starting_player_id)
+	# print "STARTING ID: " + str(starting_player_id)
 
-	for x in range(starting_player_id, MAX_PLAYERS):
-		json_data = getPlayerData(x)
-		if (json_data == None):
-			print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
-			continue
+	# for x in range(starting_player_id, MAX_PLAYERS):
+	# 	json_data = getPlayerData(x)
+	# 	if (json_data == None):
+	# 		print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+	# 		continue
 
-		player = mapJsonToPlayerDict(json_data)
-		savePlayer(player)
+	# 	player = mapJsonToPlayerDict(json_data)
+	# 	savePlayer(player)
 
-	processErrorPlayerIds()
+	# processErrorPlayerIds()
 
 	# 	# time.sleep(.2)
 
-# # LOAD FROM FILE
-	# json_data_all_players = loadPlayerData('raw_data.json')
-	# for json_data in json_data_all_players:
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
-	# 	# print json_data
+# LOAD FROM FILE
+  json_data_all_players = loadPlayerData('raw_data.json')
+  for json_data in json_data_all_players:
+  	player = mapJsonToPlayerDict(json_data)
+  	savePlayer(player)
+  	# print json_data
 
 def processErrorPlayerIds():
-	print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
-    print ERROR_PLAYERS
-	for player_id in ERROR_PLAYERS:
-		json_data = getPlayerData(player_id)
-		if (json_data == None):
-			print "PERSISTENT ERROR WITH " + str(player_id)
-			with open(ERROR_PLAYERS.txt, "a") as myfile:
-			    myfile.write(player_id)
-			continue
-		player = mapJsonToPlayerDict(json_data)
-		savePlayer(player)
+  print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+  print ERROR_PLAYERS
+  for player_id in ERROR_PLAYERS:
+  	json_data = getPlayerData(player_id)
+  	if (json_data == None):
+  		print "PERSISTENT ERROR WITH " + str(player_id)
+  		with open(ERROR_PLAYERS.txt, "a") as myfile:
+  		    myfile.write(player_id)
+  		continue
+  	player = mapJsonToPlayerDict(json_data)
+  	savePlayer(player)
 
 def loadPlayerData(filename):
 	json_data=open(filename)
@@ -213,7 +213,7 @@ def mapJsonToPlayerDict(json_data):
 # Create opponent TeamId
 #0 "12 Feb 19:45",
 #1 "Gameweek 26",
-#2 "Newcastle (A)"
+#2 "Newcastle (A)" tits
 		opponent = fixture[2].split(' (')[0]
 
 		myfixture['opponent_team_id'] = getTeamId(opponent)
@@ -305,6 +305,12 @@ def mapJsonToPlayerDict(json_data):
 	player['photo_mobile_url'] = json_data['photo_mobile_url']
 	return player
 
+def getOpponentTeamId(fixture_str):
+  opponent = fixture_str.split('(')[0]
+  print opponent
+  print getLongTeamName(opponent)
+  return getTeamId(getLongTeamName(opponent))
+
 def getStatusId(status):
 	return {
 		'i': 1,
@@ -325,6 +331,51 @@ def getPositionId(position):
 		'Midfielder' : 3,
 		"Forward" : 4
 	}[position]
+
+def getLongTeamName(shortName):
+  if (shortName=='ARS'):
+    return 'Arsenal'
+  if (shortName=='AVL'):
+    return 'Aston Villa'
+  if (shortName=='CAR'):
+    return 'Cardiff City'
+  if (shortName=='CHE'):
+    return 'Chelsea'
+  if (shortName=='CRY'):
+    return 'Crystal Palace'
+  if (shortName=='EVE'):
+    return 'Everton'
+  if (shortName=='FUL'):
+    return 'Fulham'
+  if (shortName=='HUL'):
+    return 'Hull City'
+  if (shortName=='LIV'):
+    return 'Liverpool'
+  if (shortName=='MCI'):
+    return 'Man City'
+  if (shortName=='MUN'):
+    return 'Man Utd'
+  if (shortName=='NEW'):
+    return 'Newcastle'
+  if (shortName=='NOR'):
+    return 'Norwich'
+  if (shortName=='SOU'):
+    return 'Southampton'
+  if (shortName=='STK'):
+    return 'Stoke City'
+  if (shortName=='SUN'):
+    return 'Sunderland'
+  if (shortName=='SWA'):
+    return 'Swansea'
+  if (shortName=='TOT'):
+    return 'Tottenham'
+  if (shortName=='WBA'):
+    return 'West Brom'
+  if (shortName=='WHU'):
+    return 'West Ham'
+
+
+
 def getTeamId(team):
 	return {
 		'Arsenal': 1,
@@ -472,13 +523,14 @@ def createFixtureHistoryORM(player_id, fixture_stats):
 	# winning_team_id =
 	# did_win_match =   #bool
 	# winning_team_goals =
-	# losing_team_goals =
+	# losing_team_goals = tits
 
 	fixture_history_ORM = FixtureHistory(id=None,
 		player_id = player_id,
 		fixture_date = fixture_stats['date_text'],
 		game_week = fixture_stats['game_week'],
 		result = fixture_stats['result'],
+    opponent_team_id = getOpponentTeamId(fixture_stats['result']),
 		minutes_played = fixture_stats['minutes_played'],
 		goals_scored = fixture_stats['goals_scored'],
 		assists = fixture_stats['assists'],

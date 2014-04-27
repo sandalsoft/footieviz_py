@@ -32,7 +32,7 @@ class Fixture(Base):
   is_homegame = Column(Boolean, nullable=False)
   created_at = Column(DateTime, nullable=False)
   opponent_team_id = Column(Integer, ForeignKey('teams.id'))
-  player_id = Column(Integer, ForeignKey('players.id')) 
+  player_id = Column(Integer, ForeignKey('players.id'))
 
 
 class FixtureHistory(Base):
@@ -60,7 +60,8 @@ class FixtureHistory(Base):
   value = Column(Integer, nullable=True)
   points = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('players.id')) 
+  opponent_team_id = Column(Integer, ForeignKey('teams.id'))
+  player_id = Column(Integer, ForeignKey('players.id'))
 
 class Player(Base):
   __tablename__ = "players"
@@ -126,7 +127,7 @@ class SeasonHistory(Base):
   points = Column(Integer, nullable=True)
   player_id = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
-  player_id = Column(Integer, ForeignKey('players.id')) 
+  player_id = Column(Integer, ForeignKey('players.id'))
 
 
 class Position(Base):
@@ -151,7 +152,7 @@ class Status(Base):
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.
 
- 
+
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
 # Base.metadata.create_all(engine)
