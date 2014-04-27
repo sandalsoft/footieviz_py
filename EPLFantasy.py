@@ -11,7 +11,7 @@ import datetime
 from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
-TESTING=False
+TESTING=True
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
@@ -127,9 +127,12 @@ def savePlayer(player):
 	player_id = int(player['id'])
 	print "Starting ID: " + str(player_id)
 
+
 # Create and add Player Object ORM to session
 	playerORM = createPlayerORM(player)
-	session.add(playerORM)
+      p = session.query(FixtureHistory).filter_by(player_id=player_id).update(playerORM)
+
+	# session.add(playerORM)
 	session.commit()
 
 # Create and add News Object ORM to session
