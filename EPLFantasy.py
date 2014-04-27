@@ -11,10 +11,11 @@ import datetime
 from orm import Base, Player, Fixture, FixtureHistory, SeasonHistory, News
 from random import randrange
 
+TESTING=False
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
-MAX_PLAYERS = 601
+MAX_PLAYERS = 678
 NOW = datetime.datetime.now()
 ERROR_PLAYERS = []
 
@@ -32,34 +33,35 @@ engine = create_engine('mysql://footiedb:FOOTIEd33b33@footivizdev.c3hd4gvq8fyh.u
 
 def main():
 
-# LOAD FROM INTARWEBZ
-	# starting_player_id = randrange(1,MAX_PLAYERS)
-	# if (len(sys.argv) > 1):
-	# 	starting_player_id = int(sys.argv[1])
-	# else:
-	# 	starting_player_id = 1
+  if not (TESTING):
+  # LOAD FROM INTARWEBZ
+    starting_player_id = randrange(1,MAX_PLAYERS)
+    if (len(sys.argv) > 1):
+    	starting_player_id = int(sys.argv[1])
+    else:
+    	starting_player_id = 1
 
-	# print "STARTING ID: " + str(starting_player_id)
+    print "STARTING ID: " + str(starting_player_id)
 
-	# for x in range(starting_player_id, MAX_PLAYERS):
-	# 	json_data = getPlayerData(x)
-	# 	if (json_data == None):
-	# 		print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
-	# 		continue
+    for x in range(starting_player_id, MAX_PLAYERS):
+    	json_data = getPlayerData(x)
+    	if (json_data == None):
+    		print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
+    		continue
 
-	# 	player = mapJsonToPlayerDict(json_data)
-	# 	savePlayer(player)
+    	player = mapJsonToPlayerDict(json_data)
+    	savePlayer(player)
 
-	# processErrorPlayerIds()
-
-	# 	# time.sleep(.2)
+    processErrorPlayerIds()
+  # 	# time.sleep(.2)
 
 # LOAD FROM FILE
-  json_data_all_players = loadPlayerData('raw_data.json')
-  for json_data in json_data_all_players:
-  	player = mapJsonToPlayerDict(json_data)
-  	savePlayer(player)
-  	# print json_data
+  else:
+    json_data_all_players = loadPlayerData('raw_data.json')
+    for json_data in json_data_all_players:
+    	player = mapJsonToPlayerDict(json_data)
+    	savePlayer(player)
+    	# print json_data
 
 def processErrorPlayerIds():
   print "STARTING ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
@@ -305,10 +307,33 @@ def mapJsonToPlayerDict(json_data):
 	player['photo_mobile_url'] = json_data['photo_mobile_url']
 	return player
 
+def isHomeMatch(fixture_str):
+  home_away_char = fixture_str.split(')')[0][-1]
+  if (home_away_char == 'H'):
+    return True
+  else:
+    return False
+
+def getMatchPoints(fixture_str):
+  # print "Fixture str: " + fixture_str
+  scores = fixture_str.split('-')
+  if (len(scores) < 2):
+    return None
+  # print "scores: " + str(scores)
+  my_score = scores[0][-1]
+  # print "my score: "  + my_score
+  opponent_score = scores[1]
+  # print "opponent score: " + opponent_score
+
+  if (int(my_score) > int(opponent_score)):
+    return 3
+  if (int(opponent_score) > int(my_score)):
+    return 0
+  if (int(my_score) == int(opponent_score)):
+    return 1
+
 def getOpponentTeamId(fixture_str):
   opponent = fixture_str.split('(')[0]
-  print opponent
-  print getLongTeamName(opponent)
   return getTeamId(getLongTeamName(opponent))
 
 def getStatusId(status):
@@ -449,6 +474,7 @@ def createPlayerORM(player):
 	opponent = current_fixture_str.split(' (')[0]
 	current_fixture_team_id = getTeamId(opponent)
 
+
 	player_orm = Player(id=player['id'],
 		transfers_out =player['transfers_out'],
 		code =player['code'],
@@ -517,20 +543,21 @@ def createNewsORM(player):
 
 
 def createFixtureHistoryORM(player_id, fixture_stats):
-
-	# home_team_id =
-	# away_team_id =
-	# winning_team_id =
-	# did_win_match =   #bool
+  #tits
+	# home_team_id = DONE
+	# away_team_id = DONE
+	# winning_team_id = DONE
+	# did_win_match =   #bool DONE with match points_per_game
 	# winning_team_goals =
-	# losing_team_goals = tits
+	# losing_team_goals =
 
-	fixture_history_ORM = FixtureHistory(id=None,
+  fixture_history_ORM = FixtureHistory(id=None,
 		player_id = player_id,
 		fixture_date = fixture_stats['date_text'],
 		game_week = fixture_stats['game_week'],
 		result = fixture_stats['result'],
     opponent_team_id = getOpponentTeamId(fixture_stats['result']),
+    match_points = getMatchPoints(fixture_stats['result']),
 		minutes_played = fixture_stats['minutes_played'],
 		goals_scored = fixture_stats['goals_scored'],
 		assists = fixture_stats['assists'],
@@ -550,7 +577,7 @@ def createFixtureHistoryORM(player_id, fixture_stats):
 		points = fixture_stats['points'],
 		created_at = NOW,
 		)
-	return fixture_history_ORM
+  return fixture_history_ORM
 
 def createSeasonHistoryORM(player_id, season):
 	season_history_ORM = SeasonHistory(id=None,

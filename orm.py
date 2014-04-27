@@ -61,6 +61,7 @@ class FixtureHistory(Base):
   points = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
   opponent_team_id = Column(Integer, ForeignKey('teams.id'))
+  match_points = Column(Integer, nullable=False)
   player_id = Column(Integer, ForeignKey('players.id'))
 
 class Player(Base):

@@ -48,6 +48,7 @@ CREATE TABLE `fixtureshistory` (
   `points` int(11) DEFAULT NULL,
   `created_at` text,
   `opponent_team_id` int(11) DEFAULT NULL,
+  `match_points` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=736 DEFAULT CHARSET=latin1;
 
