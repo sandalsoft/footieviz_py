@@ -13,7 +13,7 @@ from random import randrange
 
 TESTING = False
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
-FANTASY_STATS_JSON_PARAM = '/?format=json/'
+FANTASY_STATS_JSON_PARAM = '/?format=json'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
 MAX_PLAYERS = 521
