@@ -2,8 +2,8 @@
 import urllib2
 import json
 import sys
-from pprint import pprint
-import time
+# from pprint import pprint
+# import time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
@@ -13,9 +13,10 @@ from random import randrange
 
 TESTING = False
 FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
+FANTASY_STATS_JSON_PARAM = '/?format=json/'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
-MAX_PLAYERS = 678
+MAX_PLAYERS = 521
 NOW = datetime.datetime.now()
 ERROR_PLAYERS = []
 
@@ -48,7 +49,7 @@ def main():
 
         for x in range(starting_player_id, MAX_PLAYERS):
             json_data = getPlayerData(x)
-            if (json_data == None):
+            if (json_data is None):
                 print "ERROR_PLAYERS #: " + str(len(ERROR_PLAYERS))
                 continue
 
@@ -72,7 +73,7 @@ def processErrorPlayerIds():
     print ERROR_PLAYERS
     for player_id in ERROR_PLAYERS:
         json_data = getPlayerData(player_id)
-        if (json_data == None):
+        if (json_data is None):
             print "PERSISTENT ERROR WITH " + str(player_id)
             with open("ERROR_PLAYERS.txt", "a") as myfile:
                 myfile.write(player_id)
@@ -93,7 +94,7 @@ def getPlayerData(x):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36'
     }
 
-    stats_url = FANTASY_STATS_BASE_URL + str(x)
+    stats_url = FANTASY_STATS_BASE_URL + str(x) + FANTASY_STATS_JSON_PARAM
     try:
         req = urllib2.Request(stats_url, None, headers)
         response = urllib2.urlopen(req)
@@ -124,60 +125,60 @@ def getPlayerData(x):
 #
 def savePlayer(player):
 
-  # Bind the engine to the metadata of the Base class so that
-  Base.metadata.bind = engine
-  DBSession = sessionmaker(bind=engine)
-  session = DBSession()
+    # Bind the engine to the metadata of the Base class so that
+    Base.metadata.bind = engine
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
 
-  player_id = int(player['id'])
-  print "Starting ID: " + str(player_id)
+    player_id = int(player['id'])
+    print "Starting ID: " + str(player_id)
 
- # Update instead of insert?
+   # Update instead of insert?
 # http://stackoverflow.com/questions/2631935/sqlalchemy-a-better-way-for-update-with-declarative
 # session.query(User).filter_by(id=123).update({"name": u"Bob Marley"})
 # Create and add Player Object ORM to session
 
-  playerORM = createPlayerORM(player)
-  # p = session.query(FixtureHistory).filter_by(player_id=int(player['id']))
-  # print p
-  session.merge(playerORM)
-  session.commit()
+    playerORM = createPlayerORM(player)
+    # p = session.query(FixtureHistory).filter_by(player_id=int(player['id']))
+    # print p
+    session.merge(playerORM)
+    session.commit()
 
 # Create and add News Object ORM to session
-  newsORM = createNewsORM(player)
-  if (newsORM):
-      session.merge(newsORM)
+    newsORM = createNewsORM(player)
+    if (newsORM):
+        session.merge(newsORM)
 
 # Create and add Fixtures ORM to session
-  for fixture in player['fixtures']:
-      fixturesORM = createFixturesORM(player['id'], fixture)
-      session.merge(fixturesORM)
+    for fixture in player['fixtures']:
+        fixturesORM = createFixturesORM(player['id'], fixture)
+        session.merge(fixturesORM)
 
 # Create Fixtures History for the current year
-  # REFACTOR THIS INTO A METHOD OR CLASS
-  try:
-  # Add array of season historys
-      if (len(player['season_history']) is not 0):
-          for season in player['season_history']:
-              seasonHistoryORM = createSeasonHistoryORM(
-                  player_id, season)
-              session.merge(seasonHistoryORM)
+    # REFACTOR THIS INTO A METHOD OR CLASS
+    try:
+    # Add array of season historys
+        if (len(player['season_history']) is not 0):
+            for season in player['season_history']:
+                seasonHistoryORM = createSeasonHistoryORM(
+                    player_id, season)
+                session.merge(seasonHistoryORM)
 
-  # Add array of fixture histories
-      for fixture_history in player['fixture_history']:
-          fixtureHistoryORM = createFixtureHistoryORM(
-              player_id, fixture_history)
-          session.merge(fixtureHistoryORM)
+    # Add array of fixture histories
+        for fixture_history in player['fixture_history']:
+            fixtureHistoryORM = createFixtureHistoryORM(
+                player_id, fixture_history)
+            session.merge(fixtureHistoryORM)
 
-  # Commit session
-      session.commit()
-      print "Inserted: " + str(player_id)
-  except IntegrityError, e:
-      print "INTEGRITY ERROR YO: " + str(e)
-  else:
-      pass
+    # Commit session
+        session.commit()
+        print "Inserted: " + str(player_id)
+    except IntegrityError, e:
+        print "INTEGRITY ERROR YO: " + str(e)
+    else:
+        pass
 
-  # pprint(player, indent=2)
+    # pprint(player, indent=2)
 
 
 def mapJsonToPlayerDict(json_data):
@@ -552,38 +553,38 @@ def createFixtureHistoryORM(player_id, fixture_stats):
     fixture_history_ORM = FixtureHistory(id=None,
                                          player_id=player_id,
                                          fixture_date=fixture_stats[
-                                         'date_text'],
+                                             'date_text'],
                                          game_week=fixture_stats['game_week'],
                                          result=fixture_stats['result'],
                                          opponent_team_id=getOpponentTeamId(
-                                         fixture_stats['result']),
+                                             fixture_stats['result']),
                                          match_points=getMatchPoints(
-                                         fixture_stats['result']),
+                                             fixture_stats['result']),
                                          minutes_played=fixture_stats[
-                                         'minutes_played'],
+                                             'minutes_played'],
                                          goals_scored=fixture_stats[
-                                         'goals_scored'],
+                                             'goals_scored'],
                                          assists=fixture_stats['assists'],
                                          clean_sheets=fixture_stats[
-                                         'clean_sheets'],
+                                             'clean_sheets'],
                                          goals_conceded=fixture_stats[
-                                         'goals_conceded'],
+                                             'goals_conceded'],
                                          own_goals=fixture_stats['own_goals'],
                                          penalties_saved=fixture_stats[
-                                         'penalties_saved'],
+                                             'penalties_saved'],
                                          penalties_missed=fixture_stats[
-                                         'penalties_missed'],
+                                             'penalties_missed'],
                                          yellow_cards=fixture_stats[
-                                         'yellow_cards'],
+                                             'yellow_cards'],
                                          red_cards=fixture_stats['red_cards'],
                                          saves=fixture_stats['saves'],
                                          bonus=fixture_stats['bonus'],
                                          ea_sports_ppi=fixture_stats[
-                                         'ea_sports_ppi'],
+                                             'ea_sports_ppi'],
                                          bonuses_points_system=fixture_stats[
-                                         'bonuses_points_system'],
+                                             'bonuses_points_system'],
                                          net_transfers=fixture_stats[
-                                         'net_transfers'],
+                                             'net_transfers'],
                                          value=fixture_stats['value'],
                                          points=fixture_stats['points'],
                                          created_at=NOW,
@@ -602,15 +603,15 @@ def createSeasonHistoryORM(player_id, season):
                                        goals_conceded=season['goals_conceded'],
                                        own_goals=season['own_goals'],
                                        penalties_saved=season[
-                                       'penalties_saved'],
+                                           'penalties_saved'],
                                        penalties_missed=season[
-                                       'penalties_missed'],
+                                           'penalties_missed'],
                                        yellow_cards=season['yellow_cards'],
                                        red_cards=season['red_cards'],
                                        saves=season['saves'],
                                        bonus=season['bonus'],
                                        ea_sports_ppi=season['ea_sports_ppi'],
-                                       # bonuses_points_system = season['bonuses_poin	ts_system'],
+                                       # bonuses_points_system = season['bonuses_poin   ts_system'],
                                        net_transfers=season['net_transfers'],
                                        value=season['value'],
                                        points=season['points'],
