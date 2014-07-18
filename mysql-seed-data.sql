@@ -2,9 +2,13 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone="+00:00";
 
+set foreign_key_checks=0;
+
 drop database footievizdev;
 
 CREATE DATABASE `footievizdev` DEFAULT CHARACTER SET `utf8`;
+USE footievizdev;
+
 
 CREATE TABLE `fixtures` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -57,45 +61,77 @@ CREATE TABLE `news` (
 
 CREATE TABLE `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `transfers_out` int(11) DEFAULT NULL,
-  `code` int(11) DEFAULT NULL,
+  `photo` text,
+  -- `event_explain_id` int(11) not NULL,
+  -- `fixture_history_id` int(11) not NULL,
+  -- `season_history_id` int(11) not NULL,
+  -- `fixtures_id` int(11) not NULL,
+  -- `news_id` int(11) not NULL,
+
   `event_total` int(11) DEFAULT NULL,
-  `last_season_points` int(11) DEFAULT NULL,
-  `squad_number` int(11) DEFAULT NULL,
-  `event_cost` int(11) DEFAULT NULL,
-  `web_name` text,
-  `in_dreamteam` tinyint(1) DEFAULT NULL,
-  `team_code` int(11) DEFAULT NULL,
-  `shirt_image_url` text,
-  `first_name` text,
-  `transfers_out_event` int(11) DEFAULT NULL,
-  `element_type_id` int(11) DEFAULT NULL,
-  `max_cost` bigint(11) DEFAULT NULL,
-  `selected_total` int(11) DEFAULT NULL,
-  `min_cost` int(11) DEFAULT NULL,
-  `total_points` int(11) DEFAULT NULL,
-  `position_id` int(11) DEFAULT NULL,
-  `team_id` int(11) DEFAULT NULL,
-  `status_id` int(11) DEFAULT NULL,
-  `added` text,
-  `form` decimal(10,2) DEFAULT NULL,
-  `shirt_mobile_image_url` text,
-  `current_fixture` text,
-  `now_cost` int(11) DEFAULT NULL,
-  `points_per_game` decimal(10,2) DEFAULT NULL,
-  `transfers_in` int(11) DEFAULT NULL,
-  `original_cost` int(11) DEFAULT NULL,
-  `event_points` int(11) DEFAULT NULL,
-  `next_fixture` text,
-  `transfers_in_event` int(11) DEFAULT NULL,
+  `type_name` text,
+  `team_name` text,
   `selected_by` decimal(10,2) DEFAULT NULL,
-  `last_name` text,
-  `photo_mobile_url` text,
-   `current_fixture_team_id` int(11) DEFAULT NULL,
+  `total_points` int(11) DEFAULT NULL,
+  `current_fixture` text,
+  `next_fixture` text,
+  `team_code` int(11) DEFAULT NULL,
+  `team_id` int(11) DEFAULT NULL,
+  `status` text,
+  `code` int(11) DEFAULT NULL,
+  `first_name` text,
+  `second_name` text,
+  `web_name` text,
+  `now_cost` int(11) DEFAULT NULL,
+  `chance_of_playing_this_round` text,
+  `chance_of_playing_next_round` text,
+  `value_form` decimal(10,2) DEFAULT NULL,
+  `value_season` decimal(10,2) DEFAULT NULL,
+  `cost_change_start` int(11) DEFAULT NULL,
+  `cost_change_event` int(11) DEFAULT NULL,
+  `cost_change_start_fall` int(11) DEFAULT NULL,
+  `cost_change_event_fall` int(11) DEFAULT NULL,
+  `in_dreamteam` tinyint(1) DEFAULT NULL,
+  `dreamteam_count` int(11) DEFAULT NULL,
+  `selected_by_percent` decimal(10,2) DEFAULT NULL,
+  `form` decimal(10,2) DEFAULT NULL,
+  `transfers_out` int(11) DEFAULT NULL,
+  `transfers_in` int(11) DEFAULT NULL,
+  `transfers_out_event` int(11) DEFAULT NULL,
+  `transfers_in_event` int(11) DEFAULT NULL,
+  `event_points` int(11) DEFAULT NULL,
+  `points_per_game` decimal(10,2) DEFAULT NULL,
+  `ep_this` decimal(10,2) DEFAULT NULL,
+  `ep_next` decimal(10,2) DEFAULT NULL,
+  `special` tinyint(1) DEFAULT NULL,
+  `minutes` int(11) DEFAULT NULL,
+  `goals_scored` int(11) DEFAULT NULL,
+  `assists` int(11) DEFAULT NULL,
+  `clean_sheets` int(11) DEFAULT NULL,
+  `goals_conceded` int(11) DEFAULT NULL,
+  `own_goals` int(11) DEFAULT NULL,
+  `penalties_saved` int(11) DEFAULT NULL,
+  `penalties_missed` int(11) DEFAULT NULL,
+  `yellow_cards` int(11) DEFAULT NULL,
+  `red_cards` int(11) DEFAULT NULL,
+  `saves` int(11) DEFAULT NULL,
+  `bonus` int(11) DEFAULT NULL,
+  `ea_index` int(11) DEFAULT NULL,
+  `bps` int(11) DEFAULT NULL,
+  `element_type` int(11) DEFAULT NULL,
+  `team` int(11) DEFAULT NULL,
+  `current_fixture_team_id` int not NULL,
   `current_fixture_is_home` tinyint(1) DEFAULT NULL,
   `created_at` text,
+  
+  -- FOREIGN KEY (event_explain_id) REFERENCES eventsexplain(id),
+  -- FOREIGN KEY (fixture_history_id) REFERENCES fixtureshistory(id),
+  -- FOREIGN KEY (season_history_id) REFERENCES seasonshistory(id),
+  -- FOREIGN KEY (fixtures_id) REFERENCES fixtures(id),
+  -- FOREIGN KEY (current_fixture_team_id) REFERENCES teams(id),
+  -- FOREIGN KEY (news_id) REFERENCES news(id),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `positions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -142,6 +178,6 @@ CREATE TABLE `teams` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO statuses(status) VALUES ('i'),('a'),('d'),('n'),('s'),('u');
-INSERT INTO teams(api_name, `name`, short_name) VALUES ('Arsenal', 'Arsenal', 'ARS'),('Aston Villa', 'Aston Villa', 'AV'),('Chelsea', 'Chelsea', 'CHE'),('Crystal Palace', 'Crystal Palace', 'CRY'),('Everton', 'Everton', 'EVE'),('Hull', 'Hull City', 'HUL'),('Liverpool', 'Liverpool', 'LIV'),('Man City', 'Manchester City', 'MC'),('Man Utd', 'Manchester United', 'MUN'),('Newcastle', 'Newcastle', 'NEW'),('Southampton', 'Southampton', 'SOU'),('Stoke', 'Stoke City', 'STK'),('Sunderland', 'Sunderland', 'SUN'),('Swansea City', 'Swansea City', 'SWA'),('Spurs', 'Tottenham Hotspur', 'TOT'),('West Brom', 'West Bromwich Albion', 'WBA'),('West Ham', 'West Ham United', 'WHU'),('QPR', 'QPR', 'QPR'), ('Burnley', 'Burnley', 'BUR'), ('Leicester', 'Leicester', 'LEI');
+INSERT INTO teams(api_name, `name`, short_name) VALUES ('Arsenal', 'Arsenal', 'ARS'),('Aston Villa', 'Aston Villa', 'AV'),('Chelsea', 'Chelsea', 'CHE'),('Crystal Palace', 'Crystal Palace', 'CRY'),('Everton', 'Everton', 'EVE'),('Hull', 'Hull City', 'HUL'),('Liverpool', 'Liverpool', 'LIV'),('Man City', 'Manchester City', 'MC'),('Man Utd', 'Manchester United', 'MUN'),('Newcastle', 'Newcastle', 'NEW'),('Southampton', 'Southampton', 'SOU'),('Stoke', 'Stoke City', 'STK'),('Sunderland', 'Sunderland', 'SUN'),('Swansea City', 'Swansea City', 'SWA'),('Spurs', 'Tottenham Hotspur', 'TOT'),('West Brom', 'West Bromwich Albion', 'WBA'),('West Ham', 'West Ham United', 'WHU'),('QPR', 'QPR', 'QPR'), ('Burnley', 'Burnley', 'BUR'), ('Leicester', 'Leicester City', 'LEI');
 INSERT INTO positions(`name`) VALUES ('Goalkeeper'),('Defender'),('Midfielder'),('Forward');
 

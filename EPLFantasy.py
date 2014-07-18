@@ -184,27 +184,61 @@ def savePlayer(player):
 def mapJsonToPlayerDict(json_data):
     player = {}
     player['id'] = json_data['id']
-    player['team'] = json_data['team_name']
-    player['first_name'] = json_data['first_name']
-    player['web_name'] = json_data['web_name']
-    player['position'] = json_data['type_name']
-    player['transfers_out'] = json_data['transfers_out']
-    player['code'] = json_data['code']
-    player['event_total'] = json_data['event_total']
-    player['last_season_points'] = json_data['last_season_points']
-    player['squad_number'] = json_data['squad_number']
-    player['news_updated'] = json_data['news_updated']
-    player['event_cost'] = json_data['event_cost']
-    player['news_added'] = json_data['news_added']
-    player['in_dreamteam'] = json_data['in_dreamteam']
-    player['team_code'] = json_data['team_code']
-    player['shirt_image_url'] = json_data['shirt_image_url']
-    player['transfers_out_event'] = json_data['transfers_out_event']
-    player['element_type_id'] = json_data['element_type_id']
-    player['max_cost'] = json_data['max_cost']
+    player['photo'] = json_data['photo']
     player['event_explain'] = json_data['event_explain']
-    player['selected_total'] = json_data['selected']
-    player['min_cost'] = json_data['min_cost']
+    player['event_total'] = json_data['event_total']
+    player['type_name'] = json_data['type_name']
+    player['team_name'] = json_data['team_name']
+    player['selected_by'] = json_data['selected_by']
+    player['total_points'] = json_data['total_points']
+    player['current_fixture'] = json_data['current_fixture']
+    player['next_fixture'] = json_data['next_fixture']
+    player['team_code'] = json_data['team_code']
+    player['news'] = json_data['news']
+    player['team_id'] = json_data['team_id']
+    player['status'] = json_data['status']
+    player['code'] = json_data['code']
+    player['first_name'] = json_data['first_name']
+    player['second_name'] = json_data['second_name']
+    player['web_name'] = json_data['web_name']
+    player['now_cost'] = json_data['now_cost']
+    player['chance_of_playing_this_round'] = json_data['chance_of_playing_this_round']
+    player['chance_of_playing_next_round'] = json_data['chance_of_playing_next_round']
+    player['value_form'] = json_data['value_form']
+    player['value_season'] = json_data['value_season']
+    player['cost_change_start'] = json_data['cost_change_start']
+    player['cost_change_event'] = json_data['cost_change_event']
+    player['cost_change_start_fall'] = json_data['cost_change_start_fall']
+    player['cost_change_event_fall'] = json_data['cost_change_event_fall']
+    player['in_dreamteam'] = json_data['in_dreamteam']
+    player['dreamteam_count'] = json_data['dreamteam_count']
+    player['selected_by_percent'] = json_data['selected_by_percent']
+    player['form'] = json_data['form']
+    player['transfers_out'] = json_data['transfers_out']
+    player['transfers_in'] = json_data['transfers_in']
+    player['transfers_out_event'] = json_data['transfers_out_event']
+    player['transfers_in_event'] = json_data['transfers_in_event']
+    player['event_points'] = json_data['event_points']
+    player['points_per_game'] = json_data['points_per_game']
+    player['ep_this'] = json_data['ep_this']
+    player['ep_next'] = json_data['ep_next']
+    player['special'] = json_data['special']
+    player['minutes'] = json_data['minutes']
+    player['goals_scored'] = json_data['goals_scored']
+    player['assists'] = json_data['assists']
+    player['clean_sheets'] = json_data['clean_sheets']
+    player['goals_conceded'] = json_data['goals_conceded']
+    player['own_goals'] = json_data['own_goals']
+    player['penalties_saved'] = json_data['penalties_saved']
+    player['penalties_missed'] = json_data['penalties_missed']
+    player['yellow_cards'] = json_data['yellow_cards']
+    player['red_cards'] = json_data['red_cards']
+    player['saves'] = json_data['saves']
+    player['bonus'] = json_data['bonus']
+    player['ea_index'] = json_data['ea_index']
+    player['bps'] = json_data['bps']
+    player['element_type'] = json_data['element_type']
+    player['team'] = json_data['team']
 
 # FIXTURES
     fixtures = []
@@ -269,19 +303,19 @@ def mapJsonToPlayerDict(json_data):
     # pprint(player['season_history'])
     # print "told ya"
 
-    player['total_points'] = json_data['total_points']
-    player['status'] = json_data['status']
-    player['added'] = json_data['added']
-    player['form'] = json_data['form']
-    player['shirt_mobile_image_url'] = json_data['shirt_mobile_image_url']
-    player['current_fixture'] = json_data['current_fixture']
-    player['now_cost'] = json_data['now_cost']
-    player['points_per_game'] = json_data['points_per_game']
-    player['transfers_in'] = json_data['transfers_in']
-    player['news'] = json_data['news']
-    player['original_cost'] = json_data['original_cost']
-    player['event_points'] = json_data['event_points']
-    player['news_return'] = json_data['news_return']
+    # player['total_points'] = json_data['total_points']
+    # player['status'] = json_data['status']
+    # player['added'] = json_data['added']
+    # player['form'] = json_data['form']
+    # player['shirt_mobile_image_url'] = json_data['shirt_mobile_image_url']
+    # player['current_fixture'] = json_data['current_fixture']
+    # player['now_cost'] = json_data['now_cost']
+    # player['points_per_game'] = json_data['points_per_game']
+    # player['transfers_in'] = json_data['transfers_in']
+    # player['news'] = json_data['news']
+    # player['original_cost'] = json_data['original_cost']
+    # player['event_points'] = json_data['event_points']
+    # player['news_return'] = json_data['news_return']
 
     events = []
     for event in json_data['fixture_history']['all']:
@@ -309,12 +343,12 @@ def mapJsonToPlayerDict(json_data):
         events.append(fixture_event)
     player['fixture_history'] = events
 
-    player['next_fixture'] = json_data['next_fixture']
-    player['transfers_in_event'] = json_data['transfers_in_event']
-    player['selected_by'] = json_data['selected_by']
-    player['team_id'] = json_data['team_id']
-    player['last_name'] = json_data['second_name']
-    player['photo_mobile_url'] = json_data['photo_mobile_url']
+    # player['next_fixture'] = json_data['next_fixture']
+    # player['transfers_in_event'] = json_data['transfers_in_event']
+    # player['selected_by'] = json_data['selected_by']
+    # player['team_id'] = json_data['team_id']
+    # player['last_name'] = json_data['second_name']
+    # player['photo_mobile_url'] = json_data['photo_mobile_url']
     return player
 
 
@@ -421,24 +455,24 @@ def getTeamId(team):
     return {
         'Arsenal': 1,
         'Aston Villa': 2,
-        'Cardiff City': 3,
-        'Chelsea': 4,
-        'Crystal Palace': 5,
-        'Everton': 6,
-        'Fulham': 7,
-        'Hull City': 8,
-        'Liverpool': 9,
-        'Man City': 10,
-        'Man Utd': 11,
-        'Newcastle': 12,
-        'Norwich': 13,
-        'Southampton': 14,
-        'Stoke City': 15,
-        'Sunderland': 16,
-        'Swansea': 17,
-        'Tottenham': 18,
-        'West Brom': 19,
-        'West Ham': 20
+        'Chelsea': 3,
+        'Crystal Palace': 4,
+        'Everton': 5,
+        'Hull': 6,
+        'Liverpool': 7,
+        'Man City': 8,
+        'Man Utd': 9,
+        'Newcastle': 10,
+        'Southampton': 11,
+        'Stoke': 12,
+        'Sunderland': 13,
+        'Swansea': 14,
+        'Spurs': 15,
+        'West Brom': 16,
+        'West Ham': 17,
+        'QPR': 18,
+        'Burnley': 19,
+        'Leicester': 20
     }[team]
 
 
@@ -459,52 +493,83 @@ def createFixturesORM(player_id, fixture):
 
 
 def createPlayerORM(player):
-
+    # print "496-DEBUG: " + str(player)
     current_fixture_str = player['current_fixture']
-    if 'A' not in current_fixture_str.split(' (')[1]:
-        current_fixture_is_home = True
+
+    # if current_fixture is "" (this happens at before the season and maybe during bye week)
+    if len(current_fixture_str) is 0:
+         current_fixture_is_home = False
+         opponent = None
+         current_fixture_team_id = None
     else:
-        current_fixture_is_home = False
+        if 'A' not in current_fixture_str.split(' (')[1]:
+            current_fixture_is_home = True
+        else:
+            current_fixture_is_home = False
 
-    opponent = current_fixture_str.split(' (')[0]
-    current_fixture_team_id = getTeamId(opponent)
-
+        opponent = current_fixture_str.split(' (')[0]
+        print "508-DEBUG: " + str(opponent)
+        current_fixture_team_id = getTeamId(opponent)
+    print "513-DEBUG: " + str(current_fixture_is_home)
     player_orm = Player(id=player['id'],
-                        transfers_out=player['transfers_out'],
-                        code=player['code'],
+                        photo=player['photo'],
+                        event_explain=player['event_explain'],
+                        fixture_history=player['fixture_history'],
+                        season_history=player['season_history'],
+                        fixtures=player['fixtures'],
                         event_total=player['event_total'],
-                        last_season_points=player['last_season_points'],
-                        squad_number=player['squad_number'],
-                        event_cost=player['event_cost'],
-                        web_name=player['web_name'],
-                        in_dreamteam=player['in_dreamteam'],
-                        team_code=player['team_code'],
-                        shirt_image_url=player['shirt_image_url'],
-                        first_name=player['first_name'],
-                        transfers_out_event=player['transfers_out_event'],
-                        element_type_id=player['element_type_id'],
-                        max_cost=player['max_cost'],
-                        selected_total=player['selected_total'],
-                        min_cost=player['min_cost'],
-                        total_points=player['total_points'],
-                        position_id=getPositionId(player['position']),
-                        team_id=player['team_id'],
-                        status_id=getStatusId(player['status']),
-                        added=player['added'],
-                        form=player['form'],
-                        shirt_mobile_image_url=player[
-                            'shirt_mobile_image_url'],
-                        current_fixture=player['current_fixture'],
-                        now_cost=player['now_cost'],
-                        points_per_game=player['points_per_game'],
-                        transfers_in=player['transfers_in'],
-                        original_cost=player['original_cost'],
-                        event_points=player['event_points'],
-                        next_fixture=player['next_fixture'],
-                        transfers_in_event=player['transfers_in_event'],
+                        type_name=player['type_name'],
+                        team_name=player['team_name'],
                         selected_by=player['selected_by'],
-                        last_name=player['last_name'],
-                        photo_mobile_url=player['photo_mobile_url'],
+                        total_points=player['total_points'],
+                        current_fixture=player['current_fixture'],
+                        next_fixture=player['next_fixture'],
+                        team_code=player['team_code'],
+                        news=player['news'],
+                        team_id=player['team_id'],
+                        status=player['status'],
+                        code=player['code'],
+                        first_name=player['first_name'],
+                        second_name=player['second_name'],
+                        web_name=player['web_name'],
+                        now_cost=player['now_cost'],
+                        chance_of_playing_this_round=player['chance_of_playing_this_round'],
+                        chance_of_playing_next_round=player['chance_of_playing_next_round'],
+                        value_form=player['value_form'],
+                        value_season=player['value_season'],
+                        cost_change_start=player['cost_change_start'],
+                        cost_change_event=player['cost_change_event'],
+                        cost_change_start_fall=player['cost_change_start_fall'],
+                        cost_change_event_fall=player['cost_change_event_fall'],
+                        in_dreamteam=player['in_dreamteam'],
+                        dreamteam_count=player['dreamteam_count'],
+                        selected_by_percent=player['selected_by_percent'],
+                        form=player['form'],
+                        transfers_out=player['transfers_out'],
+                        transfers_in=player['transfers_in'],
+                        transfers_out_event=player['transfers_out_event'],
+                        transfers_in_event=player['transfers_in_event'],
+                        event_points=player['event_points'],
+                        points_per_game=player['points_per_game'],
+                        ep_this=player['ep_this'],
+                        ep_next=player['ep_next'],
+                        special=player['special'],
+                        minutes=player['minutes'],
+                        goals_scored=player['goals_scored'],
+                        assists=player['assists'],
+                        clean_sheets=player['clean_sheets'],
+                        goals_conceded=player['goals_conceded'],
+                        own_goals=player['own_goals'],
+                        penalties_saved=player['penalties_saved'],
+                        penalties_missed=player['penalties_missed'],
+                        yellow_cards=player['yellow_cards'],
+                        red_cards=player['red_cards'],
+                        saves=player['saves'],
+                        bonus=player['bonus'],
+                        ea_index=player['ea_index'],
+                        bps=player['bps'],
+                        element_type=player['element_type'],
+                        team=player['team'],
                         current_fixture_is_home=current_fixture_is_home,
                         current_fixture_team_id=current_fixture_team_id,
                         created_at=NOW
