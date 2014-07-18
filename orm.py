@@ -72,10 +72,6 @@ class Player(Base):
   __tablename__ = "players"
   id = Column(Integer, primary_key=True)
   photo = Column(String(100), nullable=False)
-  event_explain = Column(Integer, ForeignKey('eventsexplain.id'))
-  fixture_history = Column(Integer, ForeignKey('fixtureshistory.id'))
-  season_history = Column(Integer, ForeignKey('seasonshistory.id'))
-  fixtures = Column(Integer, ForeignKey('fixtures.id'))
   event_total = Column(Integer, nullable=False)
   type_name = Column(String(100), nullable=False)
   team_name = Column(String(100), nullable=True)
@@ -84,7 +80,6 @@ class Player(Base):
   current_fixture = Column(String(30), nullable=True)
   next_fixture = Column(String(100), nullable=True)
   team_code = Column(Integer, nullable=False)
-  news = Column(Integer, ForeignKey('news.id'))
   team_id = Column(Integer, nullable=False)
   status = Column(String(100), nullable=False)
   code = Column(Integer, nullable=False)
@@ -132,7 +127,7 @@ class Player(Base):
   current_fixture_is_home = Column(Boolean, nullable=False)
   current_fixture_team_id = Column(Integer, ForeignKey('teams.id'))
   created_at = Column(DateTime, nullable=False)
-  
+
 
 class SeasonHistory(Base):
   __tablename__ = "seasonshistory"

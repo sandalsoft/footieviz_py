@@ -62,12 +62,6 @@ CREATE TABLE `news` (
 CREATE TABLE `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `photo` text,
-  -- `event_explain_id` int(11) not NULL,
-  -- `fixture_history_id` int(11) not NULL,
-  -- `season_history_id` int(11) not NULL,
-  -- `fixtures_id` int(11) not NULL,
-  -- `news_id` int(11) not NULL,
-
   `event_total` int(11) DEFAULT NULL,
   `type_name` text,
   `team_name` text,
@@ -120,16 +114,9 @@ CREATE TABLE `players` (
   `bps` int(11) DEFAULT NULL,
   `element_type` int(11) DEFAULT NULL,
   `team` int(11) DEFAULT NULL,
-  `current_fixture_team_id` int not NULL,
+  `current_fixture_team_id` int,
   `current_fixture_is_home` tinyint(1) DEFAULT NULL,
   `created_at` text,
-  
-  -- FOREIGN KEY (event_explain_id) REFERENCES eventsexplain(id),
-  -- FOREIGN KEY (fixture_history_id) REFERENCES fixtureshistory(id),
-  -- FOREIGN KEY (season_history_id) REFERENCES seasonshistory(id),
-  -- FOREIGN KEY (fixtures_id) REFERENCES fixtures(id),
-  -- FOREIGN KEY (current_fixture_team_id) REFERENCES teams(id),
-  -- FOREIGN KEY (news_id) REFERENCES news(id),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
