@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
 class News(Base):
   __tablename__ = "news"
   id = Column(Integer, primary_key=True, autoincrement=True)
@@ -15,6 +16,7 @@ class News(Base):
   created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('players.id'))
 
+
 class EventExplain(Base):
   __tablename__ = "eventsexplain"
   id = Column(Integer, primary_key=True, autoincrement=True)
@@ -23,6 +25,7 @@ class EventExplain(Base):
   col3 = Column(Integer, nullable=True)
   created_at = Column(DateTime, nullable=False)
   player_id = Column(Integer, ForeignKey('players.id'))
+
 
 class Fixture(Base):
   __tablename__ = "fixtures"
@@ -64,46 +67,67 @@ class FixtureHistory(Base):
   match_points = Column(Integer, nullable=False)
   player_id = Column(Integer, ForeignKey('players.id'))
 
+
 class Player(Base):
   __tablename__ = "players"
   id = Column(Integer, primary_key=True)
-  transfers_out = Column(Integer, nullable=True)
-  code = Column(Integer, nullable=True)
-  event_total = Column(Integer, nullable=True)
-  last_season_points = Column(Integer, nullable=True)
-  squad_number = Column(Integer, nullable=True)
-  event_cost = Column(Integer, nullable=True)
-  web_name = Column(String(50), nullable=True)
-  in_dreamteam = Column(Integer, nullable=True)
-  team_code = Column(Integer, nullable=True)
-  shirt_image_url = Column(String(250), nullable=True)
-  first_name = Column(String(50), nullable=True)
-  transfers_out_event = Column(Integer, nullable=True)
-  element_type_id = Column(Integer, nullable=True)
-  max_cost = Column(Integer, nullable=True)
-  selected_total = Column(Integer, nullable=True)
-  min_cost = Column(Integer, nullable=True)
-  total_points = Column(Integer, nullable=True)
-  position_id = Column(Integer, nullable=True)
-  team_id = Column(Integer, nullable=True)
-  status_id = Column(Integer, nullable=True)
-  added = Column(String(100), nullable=True)
-  form = Column(Float, nullable=True)
-  shirt_mobile_image_url = Column(String(250), nullable=True)
-  current_fixture = Column(Integer, nullable=True)
-  now_cost = Column(Integer, nullable=True)
-  points_per_game = Column(Float, nullable=True)
-  transfers_in = Column(Integer, nullable=True)
-  original_cost = Column(Integer, nullable=True)
-  event_points = Column(Integer, nullable=True)
-  next_fixture = Column(Integer, nullable=True)
-  transfers_in_event = Column(Integer, nullable=True)
+  photo = Column(String(100), nullable=False)
+  event_total = Column(Integer, nullable=False)
+  type_name = Column(String(100), nullable=False)
+  team_name = Column(String(100), nullable=True)
   selected_by = Column(Float, nullable=True)
-  last_name = Column(String(50), nullable=True)
-  photo_mobile_url = Column(String(250), nullable=True)
-  created_at = Column(DateTime, nullable=False)
-  current_fixture_team_id = Column(Integer, nullable=True)
+  total_points = Column(Integer, nullable=False)
+  current_fixture = Column(String(30), nullable=True)
+  next_fixture = Column(String(100), nullable=True)
+  team_code = Column(Integer, nullable=False)
+  team_id = Column(Integer, nullable=False)
+  status = Column(String(100), nullable=False)
+  code = Column(Integer, nullable=False)
+  first_name = Column(String(100), nullable=False)
+  second_name = Column(String(100), nullable=True)
+  web_name = Column(String(100), nullable=True)
+  now_cost = Column(Integer, nullable=False)
+  chance_of_playing_this_round = Column(String(100), nullable=False)
+  chance_of_playing_next_round = Column(String(100), nullable=False)
+  value_form = Column(Float, nullable=True)
+  value_season = Column(Float, nullable=True)
+  cost_change_start = Column(Integer, nullable=False)
+  cost_change_event = Column(Integer, nullable=False)
+  cost_change_start_fall = Column(Integer, nullable=False)
+  cost_change_event_fall = Column(Integer, nullable=False)
+  in_dreamteam = Column(Boolean, nullable=False)
+  dreamteam_count = Column(Integer, nullable=False)
+  selected_by_percent = Column(Float, nullable=False)
+  form = Column(Float, nullable=False)
+  transfers_out = Column(Integer, nullable=False)
+  transfers_in = Column(Integer, nullable=False)
+  transfers_out_event = Column(Integer, nullable=False)
+  transfers_in_event = Column(Integer, nullable=False)
+  event_points = Column(Integer, nullable=False)
+  points_per_game = Column(Float, nullable=True)
+  ep_this = Column(Float, nullable=True)
+  ep_next = Column(Float, nullable=True)
+  special = Column(Boolean, nullable=False)
+  minutes = Column(Integer, nullable=False)
+  goals_scored = Column(Integer, nullable=False)
+  assists = Column(Integer, nullable=False)
+  clean_sheets = Column(Integer, nullable=False)
+  goals_conceded = Column(Integer, nullable=False)
+  own_goals = Column(Integer, nullable=False)
+  penalties_saved = Column(Integer, nullable=False)
+  penalties_missed = Column(Integer, nullable=False)
+  yellow_cards = Column(Integer, nullable=False)
+  red_cards = Column(Integer, nullable=False)
+  saves = Column(Integer, nullable=False)
+  bonus = Column(Integer, nullable=False)
+  ea_index = Column(Integer, nullable=False)
+  bps = Column(Integer, nullable=False)
+  element_type = Column(Integer, nullable=False)
+  team = Column(Integer, nullable=False)
   current_fixture_is_home = Column(Boolean, nullable=False)
+  current_fixture_team_id = Column(Integer, ForeignKey('teams.id'))
+  created_at = Column(DateTime, nullable=False)
+
 
 class SeasonHistory(Base):
   __tablename__ = "seasonshistory"
@@ -137,12 +161,14 @@ class Position(Base):
   name = Column(String(50), nullable=False)
   short_name = Column(String(4), nullable=False)
 
+
 class Teams(Base):
   __tablename__ = "teams"
   id = Column(Integer, primary_key=True)
   api_name = Column(String(50), nullable=False)
   name = Column(String(50), nullable=False)
   short_name = Column(String(4), nullable=False)
+
 
 class Status(Base):
   __tablename__ = "statuses"
