@@ -1,7 +1,7 @@
 /* jshint node: true */
-
 module.exports = function(environment) {
   var ENV = {
+    environment: environment,
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {

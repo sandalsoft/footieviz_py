@@ -2,6 +2,7 @@
 
 var Application = require('eplviz/app')['default'];
 var Router = require('eplviz/router')['default'];
+import Ember from 'ember';
 
 export default function startApp(attrs) {
   var App;
