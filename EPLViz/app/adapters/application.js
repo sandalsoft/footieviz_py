@@ -1,7 +1,12 @@
-import DS from 'vendor/ember-parse-adapter/lib/ember-parse-adapter';
+import Ember from 'ember';
+import ajax from 'ic-ajax';
 
-export default DS.ParseAdapter.extend({
-  applicationId: 'hIj40pzSmdiJiWO6obXxHedMFaaPiZxMRlnTZNCZ',
-  restApiId: 'GfmWDxkfGvZj2nzAygTNQd9rriwkOUHQ3UodtXYO',
-  javascriptId: 'WzFLNl6ukCFcHnJuPZ5opF6QGDpDNOMjHno1Hkf2'
+
+export default Ember.Object.extend({
+  headers: {
+    'X-Parse-Application-Id': 'hIj40pzSmdiJiWO6obXxHedMFaaPiZxMRlnTZNCZ',
+    'X-Parse-REST-API-Key': 'GfmWDxkfGvZj2nzAygTNQd9rriwkOUHQ3UodtXYO',
+  },
+  
+
 });
