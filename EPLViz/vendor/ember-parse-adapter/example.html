@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <title>Ember Parse Data Adapter Example</title>
+</head>
+<body>
+<h1>Example for Ember.js Parse Data Adapter</h1>
+
+<!-- dependencies -->
+<script src="vendor/jquery.min.js"></script>
+<script src="vendor/handlebars-1.0.0.beta.6.js"></script>
+<script src="vendor/ember-latest.js"></script>
+<script src="vendor/ember-data-latest.js"></script>
+
+<script src="lib/ember-parse-connector.js"></script>
+<script src="lib/ember-parse-adapter.js"></script>
+<script src="lib/ember-parse-mixin.js"></script>
+
+<!-- Example application -->
+<script>
+
+  /* Initialize Parse
+    Note: provide your own Parse acct ID's here to test the example.
+  */
+  var yourParseAppID = '',
+    yourParseJSID = '';
+  Parse.initialize(yourParseAppID, yourParseJSID);
+  
+  // Create an Ember application
+  var ExampleApp = Ember.Application.create();
+
+  // Add a Data Store to the application that implements a Parse Adapter
+  ExampleApp.Store = DS.Store.create({
+    revision: 10,
+    adapter: ParseAdapter.create()
+  });
+
+  /* 
+    Create a sample Model that implements a Parse Mixin. 
+    This will create a model that will have the following attributes:
+
+      - primaryKey = 'objectId'
+      - date field named createdAt
+      - date field named updatedAt
+      - will be saved as a 'SampleModel' class
+  */
+  ExampleApp.SampleModel = DS.Model.extend(ParseMixin, {
+    name: DS.attr('string')
+  });
+  
+  // if you wish to not use the name 'SampleModel' set it with parseType
+  ExampleApp.SampleModel.reopenClass({
+    parseType: 'Sample',
+  });
+
+  ExampleApp.initialize();
+
+  /*
+    Now you can use the Ember model as you normally would and it will persist all of it's data to your Parse account.
+  */
+</script>
+
+</body>
+</html>
