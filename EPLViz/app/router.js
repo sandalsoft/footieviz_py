@@ -8,6 +8,7 @@ Router.map(function() {
    this.resource("players", function(){
     this.resource("player", { path: "/:player_id" });
   });
+  this.route('players');
 });
 
 export default Router;
