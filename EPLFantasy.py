@@ -16,7 +16,7 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 FANTASY_STATS_JSON_PARAM = '/?format=json'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
-MAX_PLAYERS = 521
+MAX_PLAYERS = 529
 NOW = datetime.datetime.now()
 ERROR_PLAYERS = []
 
@@ -145,9 +145,9 @@ def savePlayer(player):
     session.commit()
 
 # Create and add News Object ORM to session
-    newsORM = createNewsORM(player)
-    if (newsORM):
-        session.merge(newsORM)
+    # newsORM = createNewsORM(player)
+    # if (newsORM):
+    #     session.merge(newsORM)
 
 # Create and add Fixtures ORM to session
     for fixture in player['fixtures']:
@@ -508,9 +508,9 @@ def createPlayerORM(player):
             current_fixture_is_home = False
 
         opponent = current_fixture_str.split(' (')[0]
-        print "508-DEBUG: " + str(opponent)
+        # print "508-DEBUG: " + str(opponent)
         current_fixture_team_id = getTeamId(opponent)
-    print "513-DEBUG: " + str(current_fixture_is_home)
+    # print "513-DEBUG: " + str(current_fixture_is_home)
     player_orm = Player(id=player['id'],
                         photo=player['photo'],
                         # event_explain=player['event_explain'],
@@ -577,17 +577,6 @@ def createPlayerORM(player):
 
 
 def createNewsORM(player):
-    news_added = news_updated = news_return = news = None
-    #"2013-10-04T16:01:14 UTC+0000",
-    if (player['news_added']):
-        news_added = datetime.datetime.strptime(
-            player['news_added'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-    if (player['news_updated']):
-        news_updated = datetime.datetime.strptime(
-            player['news_updated'], '%Y-%m-%dT%H:%M:%S UTC+0000')
-    if (player['news_return']):
-        news_return = datetime.datetime.strptime(
-            player['news_return'], '%Y-%m-%dT%H:%M:%S UTC+0000')
     if (player['news']):
         news = player['news']
 
