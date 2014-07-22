@@ -1,0 +1,20 @@
+
+
+{{outlet}} <br><br>
+
+Players {{totalPlayers}}<br>
+Filter by: <a href="#" {{action 'filterBy' 'type_name'}}> position</a>
+<a href="#" {{action 'filterBy' 'price'}}> price</a>
+<a href="#" {{action 'filterBy' 'team'}}> team</a>
+<a href="#" {{action 'filterBy' 'points'}}> points</a>
+<a href="#" {{action 'filterBy' 'form'}}> form</a><br>
+
+
+{{#each player in model}}
+
+  {{#link-to 'player' player.objectId}} {{player.first_name}} {{player.second_name}} {{/link-to}}  | {{player.position}}
+
+{{/each}}
+
+
+
