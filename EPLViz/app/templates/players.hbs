@@ -1,6 +1,10 @@
-Players:
+Players {{totalPlayers}}:
 
-{{#each player in players}}
+{{#each player in model}}
 
-  {{#link-to 'player' player.id}} {{player.first_name}} {{player.second_name}} {{/link-to}}<br>
+ - {{#link-to 'player' player.objectId}} {{player.first_name}} {{player.second_name}} {{/link-to}}<br>
+
 {{/each}}
+
+
+{{outlet}}

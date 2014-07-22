@@ -19,5 +19,3 @@ var app = new EmberApp();
 
 module.exports = app.toTree();
 
-// app.import('vendor/parse-js-sdk/lib/parse.js');
-app.import('vendor/ember-parse-adapter/lib/ember-parse-adapter.js');
