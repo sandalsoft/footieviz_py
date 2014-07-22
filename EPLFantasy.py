@@ -16,7 +16,7 @@ FANTASY_STATS_BASE_URL = 'http://fantasy.premierleague.com/web/api/elements/'
 FANTASY_STATS_JSON_PARAM = '/?format=json'
 # MAX_PLAYERS = 675
 # This seems to have changed to ~600 now?
-MAX_PLAYERS = 521
+MAX_PLAYERS = 527
 NOW = datetime.datetime.now()
 ERROR_PLAYERS = []
 
