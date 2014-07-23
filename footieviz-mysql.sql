@@ -52,16 +52,6 @@ CREATE TABLE `fixtureshistory` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=736 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `news_updated` text,
-  `news_added` text,
-  `news` text,
-  `news_return` text,
-  `player_id` int(11) DEFAULT NULL,
-  `created_at` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
